@@ -1,6 +1,6 @@
 from business_layer.student import StudentFunctionality
 from business_layer.job import JobFunctionality
-from database_utility import validation_utils as valid
+from utility import validation_utils as valid
 
 
 class StudentInterface:

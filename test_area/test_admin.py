@@ -1,6 +1,6 @@
 from unittest.mock import patch
 from business_layer.admin import AdminFunctionality
-import database_utility.table_names as tbn
+import utility.table_names as tbn
 
 
 class TestAdminFunctionality:

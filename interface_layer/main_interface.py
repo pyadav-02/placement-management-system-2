@@ -1,4 +1,4 @@
-from database_utility import validation_utils as valid
+from utility import validation_utils as valid
 
 from interface_layer.authenticate_interface import AuthenticationInterface
 from interface_layer.admin_interface import AdminInterface
