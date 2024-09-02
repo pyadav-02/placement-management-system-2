@@ -174,9 +174,10 @@ def get_password():
               '\npassword must contains at least 1 lower letter'
               '\npassword must contains at least 1 special character')
         password = input('Enter Password: ')
+    return password
 
 
-def hash_password(password):
+def get_hashed_password(password):
     string_byte = password.encode('utf-8')
     hashed_password = bcrypt.hashpw(string_byte, bcrypt.gensalt())
     hashed_password = str(hashed_password)[2:-1]
