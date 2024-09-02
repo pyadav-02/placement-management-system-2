@@ -169,14 +169,22 @@ def get_password():
     password = input('Enter Password: ')
     while not is_password_strong(password):
         print('week password'
-              'password must be of at least 8 character'
-              '\ncontains at least 1 upper letter'
-              '\ncontains at least 1 lower letter'
-              '\ncontains at least 1 special character')
+              '\npassword must be of at least 8 character'
+              '\npassword must contains at least 1 upper letter'
+              '\npassword must contains at least 1 lower letter'
+              '\npassword must contains at least 1 special character')
         password = input('Enter Password: ')
 
 
 def hash_password(password):
     string_byte = password.encode('utf-8')
     hashed_password = bcrypt.hashpw(string_byte, bcrypt.gensalt())
+    hashed_password = str(hashed_password)[2:-1]
     return hashed_password
+
+
+def is_hash_password_valid(password, hashed_password):
+    password = password.encode('utf-8')
+    hashed_password = hashed_password.encode('utf-8')
+    result = bcrypt.checkpw(password=password, hashed_password=hashed_password)
+    return result

@@ -14,7 +14,7 @@ class StudentInterface:
             print('-----account already exist-----')
             return
 
-        password = input('Enter your password: ')
+        password = valid.get_password()
         name = valid.get_name('Enter your name: ')
         branch = valid.get_branch()
         year = valid.get_year()

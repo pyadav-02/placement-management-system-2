@@ -1,5 +1,6 @@
 import utility.table_names as tbn
 from utility import utils as db
+from utility.validation_utils import hash_password
 
 
 class StudentFunctionality:
@@ -25,6 +26,7 @@ class StudentFunctionality:
     def create_account_request(student_id: str, password: str, name: str, branch: str, year: str, cgpa: str):
         table_name = tbn.STUDENT_ACCOUNT
 
+        password = hash_password(password)
         record = dict(student_id=student_id,
                       password=password,
                       name=name,
