@@ -75,7 +75,7 @@ class JobFunctionality:
         return job_postings
 
     @staticmethod
-    def set_round_job_posting(job_id: str, new_applicants_id: tuple[str], new_current_round: str):
+    def set_round_job_posting(job_id: str, new_applicants_id: tuple[str, ...], new_current_round: str):
         table_name = tbn.JOB_POSTING
         id_field = 'job_id'
         id_field_value = job_id
@@ -86,7 +86,7 @@ class JobFunctionality:
         db.update_record_by_id(table_name, id_field, id_field_value, updates)
 
     @staticmethod
-    def set_students_job_status(company_name, students_id: tuple[str]):
+    def set_students_job_status(company_name, students_id: tuple[str, ...]):
         table_name = tbn.STUDENT_ACCOUNT
         updates = dict(company_name=company_name, placement_status='placed')
 

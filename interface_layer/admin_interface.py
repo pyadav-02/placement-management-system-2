@@ -189,7 +189,7 @@ class AdminInterface:
             if not only_view:
                 print(f'press {i + 1} to chose bellow job posting\n')
 
-            for j in range(len(attribute_names)):
+            for j in range(1, len(attribute_names)):
                 print(attribute_names[j], job_postings[i][j])
 
         print('-' * 10)

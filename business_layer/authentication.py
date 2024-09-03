@@ -2,6 +2,7 @@ import utility.table_names as tbn
 from utility import utils as db
 from utility.validation_utils import is_hash_password_valid
 
+
 class AuthenticationFunctionality:
     @staticmethod
     def is_valid(account_id, password, role):
@@ -14,5 +15,3 @@ class AuthenticationFunctionality:
         if len(result) == 0:
             return False
         return is_hash_password_valid(password, result[0][0])
-
-
