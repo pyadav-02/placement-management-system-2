@@ -114,3 +114,15 @@ class TestStudentFunctionality(unittest.TestCase):
         result = self.student.get_question_response()
         self.assertEqual(result, expected_output)
         mock_fetch_record_by_condition.assert_called_once_with(table_name, return_field, condition)
+
+    @patch('business_layer.student.db.fetch_record_by_condition')
+    def test_get_message(self, mock_fetch_record_by_condition):
+        expected_output = [('this is message', 'a122233124'), ('message by admin', 'a123191912')]
+
+        mock_fetch_record_by_condition.return_value = expected_output
+        self.student.get_messages()
+
+        table_name = tbn.MESSAGE
+        return_field = ('message', 'admin_id')
+        condition = dict(student_id=self.student_id)
+        mock_fetch_record_by_condition.assert_called_once_with(table_name, return_field, condition)
