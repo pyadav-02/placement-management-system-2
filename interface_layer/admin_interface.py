@@ -29,9 +29,9 @@ class AdminInterface:
             elif choice == 3:
                 AdminInterface.post_job()
             elif choice == 4:
-                AdminInterface.move_job_next_round(only_view=True)
+                self.move_job_next_round(only_view=True)
             elif choice == 5:
-                AdminInterface.move_job_next_round()
+                self.move_job_next_round()
 
             print(AdminInterface.MENU)
             choice = valid.get_choice(choices)
@@ -172,8 +172,7 @@ class AdminInterface:
                                             total_rounds_count,
                                             application_close_date)
 
-    @staticmethod
-    def move_job_next_round(only_view=False):
+    def move_job_next_round(self, only_view=False):
         job_postings = JobFunctionality.get_all_job_posting()
 
         if len(job_postings) == 0:
@@ -237,6 +236,9 @@ class AdminInterface:
                     new_current_round = str(current_round + 1)
                     JobFunctionality.set_round_job_posting(job_id, selected_applicants_id, new_current_round)
 
+                    message = input('Enter message for selected students: ')
+                    self.admin.send_message(message, selected_applicants_id)
+
                     job_postings[job_choice-1][-1] = ', '.join(selected_applicants_id)
                     job_postings[job_choice - 1][-3] = new_current_round
 
@@ -248,9 +250,16 @@ class AdminInterface:
                 selected_applicants_id = valid.get_selected_applicants(applicants_id, not_last_round=False)
                 if len(selected_applicants_id) != 0:
                     JobFunctionality.set_students_job_status(company_name, selected_applicants_id)
+                    message = input('Enter message for selected students: ')
+                    self.admin.send_message(message, selected_applicants_id)
 
                 JobFunctionality.close_job_process(job_id)
+
                 print('---job process completed---')
+
+            if len(left_job_choices) == 0:
+                print('-----process of all jobs are completed-----')
+                break
 
             print(menu)
             action_choice = valid.get_choice(action_choices)

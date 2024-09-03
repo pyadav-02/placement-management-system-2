@@ -29,11 +29,12 @@ class StudentInterface:
     press 1 to ask question
     press 2 to view responses of questions
     press 3 to apply for job
+    press 4 to view all messages
     """
 
     def do_student_functions(self):
         print(StudentInterface.MENU)
-        choices = (0, 1, 2, 3)
+        choices = (0, 1, 2, 3, 4)
         choice = valid.get_choice(choices)
 
         while choice != 0:
@@ -43,6 +44,8 @@ class StudentInterface:
                 self.view_question_response()
             elif choice == 3:
                 self.apply_for_job()
+            elif choice == 4:
+                self.view_mass_message()
 
             print(StudentInterface.MENU)
             choice = valid.get_choice(choices)
@@ -118,3 +121,11 @@ class StudentInterface:
 
             print(menu)
             action_choice = valid.get_choice(action_choices)
+
+    def view_mass_message(self):
+        messages = self.student.get_messages()
+        for message in messages:
+            print('-' * 10)
+            print('message:', message[0])
+            print('admin id:', message[1])
+        print('-' * 10)

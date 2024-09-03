@@ -60,3 +60,11 @@ class StudentFunctionality:
 
         records = db.fetch_record_by_condition(table_name, return_field, condition)
         return records
+
+    def get_messages(self):
+        table_name = tbn.MESSAGE
+        return_field = ('message', 'admin_id')
+        condition = dict(student_id=self.student_id)
+
+        records = db.fetch_record_by_condition(table_name, return_field, condition)
+        return records

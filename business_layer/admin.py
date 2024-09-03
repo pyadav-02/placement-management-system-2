@@ -55,3 +55,10 @@ class AdminFunctionality:
         id_field_value = question_id
         updates = dict(answer=answer, admin_id=self.__admin_id, is_answered='true')
         db.update_record_by_id(table_name, id_field, id_field_value, updates)
+
+    def send_message(self, message: str, students_id: tuple[str, ...]):
+        table_name = tbn.MESSAGE
+        for student_id in students_id:
+            records = dict(student_id=student_id, message=message, admin_id=self.__admin_id)
+            db.insert_record(table_name, records)
+
