@@ -9,19 +9,27 @@ class TestStudentFunctionality(unittest.TestCase):
         self.student_id = 's111111111'
         self.student = StudentFunctionality(self.student_id)
 
+    def test_is_account_request_pending_empty_list(self):
+        self.is_account_request_pending_tester([], False)
+
+    def test_is_account_request_pending_status_pending(self):
+        self.is_account_request_pending_tester([('pending',)], True)
+
+    def test_id_account_request_pending_status_not_pending(self):
+        self.is_account_request_pending_tester([('approved',)], False)
+
     @patch('business_layer.student.db.fetch_record_by_condition')
-    def test_is_account_request_pending_empty_record(self, mock_fetch_record_by_condition):
+    def is_account_request_pending_tester(self, fetch_return_value, expected_result, mock_fetch_record_by_condition):
         argument_student_id = 's191999999'
-        expected_result = False
 
         table_name = tbn.STUDENT_ACCOUNT
         return_field = ('approval_status',)
         conditions = dict(student_id=argument_student_id)
 
-        mock_fetch_record_by_condition.return_value = []
+        mock_fetch_record_by_condition.return_value = fetch_return_value
         result = StudentFunctionality.is_account_request_pending(argument_student_id)
 
-        self.assertEqual(result , expected_result)
+        self.assertEqual(result, expected_result)
         mock_fetch_record_by_condition.assert_called_once_with(table_name, return_field, conditions)
 
     @patch('business_layer.student.valid.get_hashed_password')
