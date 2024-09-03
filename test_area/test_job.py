@@ -143,4 +143,13 @@ class TestJobFunctionality:
         conditions = (('student_id', 's123112121'), ('student_id', 's119999110'), ('student_id', 's734234282'))
         mock_update_record_by_condition.assert_called_once_with(table_name, updates, conditions)
 
+    @patch('utility.utils.delete_record_by_id')
+    def test_close_job_process(self, mock_delete_record_by_id):
+        job_id = '21'
 
+        JobFunctionality.close_job_process(job_id)
+
+        table_name = tbn.JOB_POSTING
+        id_field = 'job_id'
+        id_field_value = job_id
+        mock_delete_record_by_id.assert_called_once_with(table_name, id_field, id_field_value)
