@@ -1,10 +1,11 @@
+import unittest
 from unittest.mock import patch
 from business_layer.job import JobFunctionality
 from utility import table_names as tbn
 
 
-class TestJobFunctionality:
-    @patch('utility.utils.insert_record')
+class TestJobFunctionality(unittest.TestCase):
+    @patch('business_layer.job.db.insert_record')
     def test_create_job_postings(self, mock_insert_record):
         company_name = 'watchGuard'
         job_description = 'for software role'
@@ -28,7 +29,7 @@ class TestJobFunctionality:
 
         mock_insert_record.assert_called_once_with(table_name, record)
 
-    @patch('utility.utils.fetch_record_by_condition')
+    @patch('business_layer.job.db.fetch_record_by_condition')
     def test_get_applicable_job_postings(self, mock_fetch_record_by_condition):
         student_id = 's111122223'
         expected_result = [('tcs', 'sde', '6', '2', '10-09-2024', '11', 's111111119', 'cse, it')]
@@ -43,9 +44,8 @@ class TestJobFunctionality:
         mock_fetch_record_by_condition.side_effect = [return_value_fetch1, return_value_fetch2]
 
         result = JobFunctionality.get_applicable_job_postings(student_id)
-        assert result == expected_result
-
-        assert mock_fetch_record_by_condition.call_count == 2
+        self.assertEqual(result, expected_result)
+        self.assertEqual(mock_fetch_record_by_condition.call_count, 2)
 
         table_name = tbn.STUDENT_ACCOUNT
         return_field = ('branch',)
@@ -58,8 +58,8 @@ class TestJobFunctionality:
         condition = dict(current_round='0')
         mock_fetch_record_by_condition.assert_any_call(table_name, return_field, condition)
 
-    @patch('utility.utils.update_record_by_id')
-    @patch('utility.utils.fetch_record_by_condition')
+    @patch('business_layer.job.db.update_record_by_id')
+    @patch('business_layer.job.db.fetch_record_by_condition')
     def test_student_apply_for_job_none(self, mock_fetch_record_by_condition, mock_update_record_by_id):
         job_id = '12'
         student_id = 's111111119'
@@ -79,8 +79,8 @@ class TestJobFunctionality:
         updates = dict(applicants_id=applicants_id)
         mock_update_record_by_id.assert_called_once_with(table_name, id_field, id_field_value, updates)
 
-    @patch('utility.utils.update_record_by_id')
-    @patch('utility.utils.fetch_record_by_condition')
+    @patch('business_layer.job.db.update_record_by_id')
+    @patch('business_layer.job.db.fetch_record_by_condition')
     def test_student_apply_for_job_not_none(self, mock_fetch_record_by_condition, mock_update_record_by_id):
         job_id = '12'
         student_id = 's111111119'
@@ -101,14 +101,14 @@ class TestJobFunctionality:
         updates = dict(applicants_id=applicants_id)
         mock_update_record_by_id.assert_called_once_with(table_name, id_field, id_field_value, updates)
 
-    @patch('utility.utils.fetch_record_by_condition')
+    @patch('business_layer.job.db.fetch_record_by_condition')
     def test_get_all_job_posting(self, mock_fetch_record_by_condition):
         fetch_return_value = [('91', 'google', 'sde', '12', 'cse, it', '6', '3',
                                '09-09-2024', 's123123123, s767876567')]
         mock_fetch_record_by_condition.return_value = fetch_return_value
 
         result = JobFunctionality.get_all_job_posting()
-        assert result == fetch_return_value
+        self.assertEqual(result, fetch_return_value)
 
         table_name = tbn.JOB_POSTING
         return_fields = ('job_id', 'company_name', 'job_description', 'ctc', 'applicable_branches',
@@ -116,7 +116,7 @@ class TestJobFunctionality:
         conditions = dict()
         mock_fetch_record_by_condition.assert_called_once_with(table_name, return_fields, conditions)
 
-    @patch('utility.utils.update_record_by_id')
+    @patch('business_layer.job.db.update_record_by_id')
     def test_set_round_job_posting(self, mock_update_record_by_id):
         job_id = '23'
         new_applicants_id = ('s123123141', 's123123331', 's1119991118')
@@ -131,7 +131,7 @@ class TestJobFunctionality:
         updates = dict(applicants_id=new_applicants_id, current_round=new_current_round)
         mock_update_record_by_id.assert_called_once_with(table_name, id_field, id_field_value, updates)
 
-    @patch('utility.utils.update_record_by_condition')
+    @patch('business_layer.job.db.update_record_by_condition')
     def test_set_students_job_status(self, mock_update_record_by_condition):
         company_name = 'watchGuard'
         students_id = ('s123112121', 's119999110', 's734234282')
@@ -143,7 +143,7 @@ class TestJobFunctionality:
         conditions = (('student_id', 's123112121'), ('student_id', 's119999110'), ('student_id', 's734234282'))
         mock_update_record_by_condition.assert_called_once_with(table_name, updates, conditions)
 
-    @patch('utility.utils.delete_record_by_id')
+    @patch('business_layer.job.db.delete_record_by_id')
     def test_close_job_process(self, mock_delete_record_by_id):
         job_id = '21'
 

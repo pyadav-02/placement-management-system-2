@@ -11,7 +11,7 @@ def fetch_record_by_condition(table_name: str, return_fields: tuple, conditions:
     parameter = tuple(map(str, conditions.values()))
 
     records = execute_query(query, parameter, return_data=True)
-    records = get_string_outputs(records)
+    records = [tuple(map(str, row)) for row in records]
     return records
 
 
@@ -23,11 +23,6 @@ def get_condition_query_string(conditions: dict, logical_operator, special_condi
 
     conditions_string = (' ' + logical_operator + ' ').join(conditions_list)
     return conditions_string
-
-
-def get_string_outputs(records):
-    records = [tuple(map(str, row)) for row in records]
-    return records
 
 
 def update_record_by_id(table_name: str,  id_field: str,  id_field_value: str,  updates: dict) -> None:

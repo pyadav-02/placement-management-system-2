@@ -55,5 +55,3 @@ class AdminFunctionality:
         id_field_value = question_id
         updates = dict(answer=answer, admin_id=self.__admin_id, is_answered='true')
         db.update_record_by_id(table_name, id_field, id_field_value, updates)
-
-

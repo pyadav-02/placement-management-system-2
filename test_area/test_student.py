@@ -1,14 +1,15 @@
+import unittest
 from unittest.mock import patch
 from business_layer.student import StudentFunctionality
 from utility import table_names as tbn
 
 
-class TestStudentFunctionality:
-    def setup_method(self):
+class TestStudentFunctionality(unittest.TestCase):
+    def setUp(self):
         self.student_id = 's111111111'
         self.student = StudentFunctionality(self.student_id)
 
-    @patch('utility.utils.fetch_record_by_condition')
+    @patch('business_layer.student.db.fetch_record_by_condition')
     def test_is_account_request_pending_empty_record(self, mock_fetch_record_by_condition):
         argument_student_id = 's191999999'
         expected_result = False
@@ -20,11 +21,11 @@ class TestStudentFunctionality:
         mock_fetch_record_by_condition.return_value = []
         result = StudentFunctionality.is_account_request_pending(argument_student_id)
 
-        assert result == expected_result
+        self.assertEqual(result , expected_result)
         mock_fetch_record_by_condition.assert_called_once_with(table_name, return_field, conditions)
 
-    @patch('utility.validation_utils.get_hashed_password')
-    @patch('utility.utils.insert_record')
+    @patch('business_layer.student.valid.get_hashed_password')
+    @patch('business_layer.student.db.insert_record')
     def test_create_account_request(self, mock_insert_record, mock_get_hashed_password):
         argument_student_id = 's123123123'
         argument_password = 'root'
@@ -54,7 +55,7 @@ class TestStudentFunctionality:
         mock_insert_record.assert_called_once_with(table_name, record)
         mock_get_hashed_password.assser_called_once_with(argument_password)
 
-    @patch('utility.utils.fetch_record_by_condition')
+    @patch('business_layer.student.db.fetch_record_by_condition')
     def test_is_account_exist_true(self, mock_fetch_record_by_condition):
         student_id = 's110101010'
         expected_output = True
@@ -65,10 +66,10 @@ class TestStudentFunctionality:
 
         mock_fetch_record_by_condition.return_value = [(student_id,)]
         result = StudentFunctionality.is_account_exist(student_id)
-        assert result == expected_output
+        self.assertEqual(result, expected_output)
         mock_fetch_record_by_condition.assert_called_once_with(table_name, return_field, conditions)
 
-    @patch('utility.utils.fetch_record_by_condition')
+    @patch('business_layer.student.db.fetch_record_by_condition')
     def test_is_account_exist_false(self, mock_fetch_record_by_condition):
         student_id = 's110101010'
         expected_output = False
@@ -79,10 +80,10 @@ class TestStudentFunctionality:
 
         mock_fetch_record_by_condition.return_value = []
         result = StudentFunctionality.is_account_exist(student_id)
-        assert result == expected_output
+        self.assertEqual(result, expected_output)
         mock_fetch_record_by_condition.assert_called_once_with(table_name, return_field, conditions)
 
-    @patch('utility.utils.insert_record')
+    @patch('business_layer.student.db.insert_record')
     def test_post_question(self, mock_insert_record):
         question = 'what is this?'
 
@@ -92,7 +93,7 @@ class TestStudentFunctionality:
         self.student.post_question(question)
         mock_insert_record.assert_called_once_with(table_name, record)
 
-    @patch('utility.utils.fetch_record_by_condition')
+    @patch('business_layer.student.db.fetch_record_by_condition')
     def test_get_question_response(self, mock_fetch_record_by_condition):
         expected_output = [('interview in which room?', 'a292919192', 'room number 8', 'true'),
                            ('give complete information?', 'a111118881', 'given sufficient information', 'true')]
@@ -103,5 +104,5 @@ class TestStudentFunctionality:
 
         mock_fetch_record_by_condition.return_value = expected_output
         result = self.student.get_question_response()
-        assert result == expected_output
+        self.assertEqual(result, expected_output)
         mock_fetch_record_by_condition.assert_called_once_with(table_name, return_field, condition)
