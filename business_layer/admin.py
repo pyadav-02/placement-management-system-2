@@ -45,7 +45,7 @@ class AdminFunctionality:
     def get_all_unanswered_questions():
         table_name = tbn.QUESTION_ANSWER
         return_field = ('student_id', 'question', 'question_id')
-        conditions = dict()
+        conditions = dict(is_answered='false')
         records = db.fetch_record_by_condition(table_name, return_field, conditions)
         return records
 

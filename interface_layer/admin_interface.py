@@ -96,11 +96,11 @@ class AdminInterface:
             print('-----no unanswered question remaining-----')
             return
 
-        attribute_names = ('question:', 'asked by:')
+        attribute_names = ('asked by:', 'question:')
 
         for i in range(len(questions)):
             print('-' * 10)
-            print(f'press {i + 1} to chose bellow job posting\n')
+            print(f'press {i + 1} to chose below question\n')
 
             for j in range(len(attribute_names)):
                 print(attribute_names[j], questions[i][j])
