@@ -52,7 +52,7 @@ def get_condition_query_tuple_string(conditions, logical_operator, special_condi
     return conditions_string
 
 
-def update_record_by_condition(table_name: str, updates: dict, conditions) -> None:
+def update_record_by_condition(table_name: str, updates: dict, conditions: tuple) -> None:
     updates_string = get_updates_query_string(updates)
     conditions_string = get_condition_query_tuple_string(conditions, 'OR', '1 = 2')
 
@@ -72,7 +72,7 @@ def delete_record_by_id(tabel_name: str,  id_field: str, id_field_value: str) ->
 
 def insert_record(table_name: str, record: dict) -> None:
     columns_string, values_string = get_column_value_string(record)
-    query = ('INSERT INTO ' + table_name + columns_string
+    query = ('INSERT INTO ' + table_name + ' ' + columns_string
              + ' VALUES' + values_string + ';')
     parameters = tuple(map(str, record.values()))
     execute_query(query, parameters)

@@ -68,7 +68,7 @@ class TestAdminFunctionality(unittest.TestCase):
     def test_get_all_unanswered_questions(self, mock_fetch_record_by_condition):
         table_name = tbn.QUESTION_ANSWER
         return_field = ('student_id', 'question', 'question_id')
-        conditions = dict()
+        conditions = dict(is_answered='false')
 
         AdminFunctionality.get_all_unanswered_questions()
         mock_fetch_record_by_condition.assert_called_once_with(table_name, return_field, conditions)

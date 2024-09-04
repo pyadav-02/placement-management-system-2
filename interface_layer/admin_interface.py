@@ -46,7 +46,7 @@ class AdminInterface:
         field_names = ('student id:', 'name:', 'branch:', 'year:')
         for i in range(len(account_requests)):
             print('-' * 10)
-            print(f'press {i+1} to chose bellow account\n')
+            print(f'press {i+1} to chose below account\n')
 
             for j in range(4):
                 print(field_names[j], account_requests[i][j])
@@ -132,6 +132,7 @@ class AdminInterface:
 
             if len(left_job_choices) == 0:
                 print('-----response of every question is given-----')
+                break
 
             print(menu)
             action_choice = valid.get_choice(action_choices)
@@ -186,7 +187,7 @@ class AdminInterface:
             print('-' * 10)
 
             if not only_view:
-                print(f'press {i + 1} to chose bellow job posting\n')
+                print(f'press {i + 1} to chose below job posting\n')
 
             for j in range(1, len(attribute_names)):
                 print(attribute_names[j], job_postings[i][j])
