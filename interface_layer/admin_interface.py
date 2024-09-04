@@ -78,9 +78,11 @@ class AdminInterface:
             if action_choice == 1:
                 self.admin.approve_account_by_id(account_id)
                 AdminFunctionality.put_id_in_credentials(account_id)
+                print('-----account approved-----')
 
             elif action_choice == 2:
                 AdminFunctionality.refuse_account_by_id(account_id)
+                print('-----account refused-----')
 
             if len(left_account_choices) == 0:
                 print('-----action on every requests is taken-----')

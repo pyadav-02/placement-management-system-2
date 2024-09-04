@@ -1,4 +1,4 @@
-from utility.utils_helper import execute_query
+from utility.connector import Connector
 
 
 def fetch_record_by_condition(table_name: str, return_fields: tuple, conditions: dict) -> list[tuple]:
@@ -10,7 +10,7 @@ def fetch_record_by_condition(table_name: str, return_fields: tuple, conditions:
              + ' WHERE ' + conditions_str + ';')
     parameter = tuple(map(str, conditions.values()))
 
-    records = execute_query(query, parameter, return_data=True)
+    records = Connector.execute_query(query, parameter, return_data=True)
     records = [tuple(map(str, row)) for row in records]
     return records
 
@@ -31,7 +31,7 @@ def update_record_by_id(table_name: str,  id_field: str,  id_field_value: str,  
              + ' SET ' + updates_string
              + ' WHERE ' + id_field + ' = ' + '?' + ';')
     parameters = tuple(map(str, updates.values())) + (id_field_value,)
-    execute_query(query, parameters)
+    Connector.execute_query(query, parameters)
 
 
 def get_updates_query_string(updates: dict):
@@ -60,14 +60,14 @@ def update_record_by_condition(table_name: str, updates: dict, conditions: tuple
              + ' SET ' + updates_string
              + ' WHERE ' + conditions_string + ';')
     parameters = tuple(map(str, updates.values())) + tuple(condition[1] for condition in conditions)
-    execute_query(query, parameters)
+    Connector.execute_query(query, parameters)
 
 
 def delete_record_by_id(tabel_name: str,  id_field: str, id_field_value: str) -> None:
     query = ('DELETE FROM ' + tabel_name
              + ' WHERE ' + id_field + ' = ' + '?;')
     parameters = (id_field_value,)
-    execute_query(query, parameters)
+    Connector.execute_query(query, parameters)
 
 
 def insert_record(table_name: str, record: dict) -> None:
@@ -75,7 +75,7 @@ def insert_record(table_name: str, record: dict) -> None:
     query = ('INSERT INTO ' + table_name + ' ' + columns_string
              + ' VALUES' + values_string + ';')
     parameters = tuple(map(str, record.values()))
-    execute_query(query, parameters)
+    Connector.execute_query(query, parameters)
 
 
 def get_column_value_string(record):

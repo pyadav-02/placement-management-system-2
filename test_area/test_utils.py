@@ -5,7 +5,7 @@ from utility import utils as db
 
 class TestUtils(unittest.TestCase):
     @patch('utility.utils.get_condition_query_string')
-    @patch('utility.utils.execute_query')
+    @patch('utility.utils.Connector.execute_query')
     def test_fetch_record_by_condition(self, mock_execute_query, mock_get_condition_query_string):
         table_name = 'abc'
         return_fields = ('col1', 'col2', 'col3')
@@ -28,7 +28,7 @@ class TestUtils(unittest.TestCase):
         result = db.get_condition_query_string(conditions, logical_operator, special_condition)
         self.assertEqual(result, expected_result)
 
-    @patch('utility.utils.execute_query')
+    @patch('utility.utils.Connector.execute_query')
     @patch('utility.utils.get_updates_query_string')
     def test_update_record_by_id(self, mock_get_update_query_string, mock_execute_query):
         table_name = 'abc'
@@ -59,7 +59,7 @@ class TestUtils(unittest.TestCase):
         result = db.get_condition_query_tuple_string(conditions, logical_operator, special_condition)
         self.assertEqual(result, expected_output)
 
-    @patch('utility.utils.execute_query')
+    @patch('utility.utils.Connector.execute_query')
     def test_update_record_by_condition(self, mock_execute_query):
         table_name = 'abc'
         updates = dict(col1='val1', col2='val2')
@@ -71,7 +71,7 @@ class TestUtils(unittest.TestCase):
         parameter = ('val1', 'val2', 'val5', 'val9')
         mock_execute_query.assert_called_once_with(query, parameter)
 
-    @patch('utility.utils.execute_query')
+    @patch('utility.utils.Connector.execute_query')
     def test_delete_record_by_id(self, mock_execute_query):
         table_name = 'abc'
         id_field = 'col1'
@@ -83,7 +83,7 @@ class TestUtils(unittest.TestCase):
         parameter = ('val1',)
         mock_execute_query.assert_called_once_with(query, parameter)
 
-    @patch('utility.utils.execute_query')
+    @patch('utility.utils.Connector.execute_query')
     @patch('utility.utils.get_column_value_string')
     def test_insert_record(self, mock_get_column_value_string, mock_execute_query):
         table_name = 'pqr'

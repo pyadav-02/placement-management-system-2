@@ -124,6 +124,11 @@ class StudentInterface:
 
     def view_mass_message(self):
         messages = self.student.get_messages()
+
+        if len(messages) == 0:
+            print('---no messages---')
+            return
+
         for message in messages:
             print('-' * 10)
             print('message:', message[0])
