@@ -2,27 +2,27 @@ import datetime
 import bcrypt
 import re
 INVALID = 'Invalid input please enter valid input'
-BACK = 'press 0 to go back and 1 to continue'
 
 
-def get_choice(choices, error_string=INVALID, input_string='Enter input: '):
+def get_choice(choices):
     choices = tuple(map(str, choices))
-    choice = input(input_string)
+    choice = input('Enter input: ')
 
     while choice not in choices:
-        print(error_string)
-        choice = input(input_string)
+        print(INVALID)
+        choice = input('Enter input: ')
 
     return int(choice)
 
 
 def get_account_id(role):
+    account_id = input('Enter account id: ')
+
     def is_valid(aid):
         if len(aid) == 10 and aid[0] == role[0] and aid[1:].isdigit():
             return True
         return False
 
-    account_id = input('Enter account id: ')
     while not is_valid(account_id):
         print(INVALID)
         account_id = input('Enter account id: ')
