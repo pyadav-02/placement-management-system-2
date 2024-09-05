@@ -23,7 +23,7 @@ class TestValid(unittest.TestCase):
         role = 'student'
         self.mock_input.side_effect = ['s2131', 'h123j', 's111111119']
 
-        result = valid.get_account_id(role)
+        result = valid.get_account_id()
 
         self.assertEqual(result, 's111111119')
         self.assertEqual(self.mock_input.call_count, 3)
@@ -32,7 +32,7 @@ class TestValid(unittest.TestCase):
         role = 'admin'
         self.mock_input.side_effect = ['s21mmm31', 'pqr123j', 'a111111119']
 
-        result = valid.get_account_id(role)
+        result = valid.get_account_id()
 
         self.assertEqual(result, 'a111111119')
         self.assertEqual(self.mock_input.call_count, 3)
