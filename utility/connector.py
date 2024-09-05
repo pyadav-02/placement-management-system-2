@@ -16,17 +16,16 @@ class Connector:
 
     @staticmethod
     def execute_query(query, parameters, return_data=False):
-        # print("*" * 20)
-        # print(query)
-        # print(parameters)
-        # print('*' * 20)
-
         Connector.cursor.execute(query, parameters)
 
         if return_data:
             return Connector.cursor.fetchall()
         else:
             Connector.connection.commit()
+
+    @staticmethod
+    def create_required_table():
+        pass
 
     @staticmethod
     def disconnect():

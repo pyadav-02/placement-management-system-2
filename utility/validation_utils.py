@@ -189,15 +189,9 @@ def get_selected_applicants(applicants_id: tuple, not_last_round=True):
 
 
 def is_password_strong(password):
-    expression1 = r'(.+){8,}'
-    expression2 = r'[a-zA-Z0-9]+'
-    expression3 = r'[^a-zA-Z0-9]+'
-
-    matches1 = re.findall(expression1, password)
-    matches2 = re.findall(expression2, password)
-    matches3 = re.findall(expression3, password)
-
-    if matches1 and matches2 and matches3:
+    expression = r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\W).{8,}$'
+    matches = re.findall(expression, password)
+    if matches:
         return True
     return False
 
