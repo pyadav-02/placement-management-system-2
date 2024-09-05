@@ -16,27 +16,35 @@ def start_menu():
     press 3 for creating student account
     """
 
-    print(menu)
     choices = [0, 1, 2, 3]
-    choice = valid.get_choice(choices)
-
+    choice = -1
     while choice != 0:
+
+        print(menu)
+        choice = valid.get_choice(choices)
+
         if choice == 1:
-            admin_id = valid.get_account_id('admin')
+            admin_id, go_back = valid.get_account_id()
+            if go_back:
+                continue
+
             if AuthenticationInterface.is_admin_valid(admin_id):
                 admin = AdminFunctionality(admin_id)
                 admin = AdminInterface(admin)
                 admin.do_admin_functions()
 
         elif choice == 2:
-            student_id = valid.get_account_id('student')
+            student_id, go_back = valid.get_account_id()
+            if go_back:
+                continue
+
             if AuthenticationInterface.is_student_valid(student_id):
                 student = StudentFunctionality(student_id)
                 student = StudentInterface(student)
                 student.do_student_functions()
 
         elif choice == 3:
+
             StudentInterface.student_create_account()
 
-        print(menu)
-        choice = valid.get_choice(choices)
+

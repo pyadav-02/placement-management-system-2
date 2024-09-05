@@ -1,7 +1,11 @@
 import datetime
 import bcrypt
 import re
-INVALID = 'Invalid input please enter valid input'
+INVALID_LOCK = 'Invalid input please enter valid input'
+BACK = """
+press 0 to go back
+press 1 to continue giving input
+"""
 
 
 def get_choice(choices):
@@ -9,38 +13,60 @@ def get_choice(choices):
     choice = input('Enter input: ')
 
     while choice not in choices:
-        print(INVALID)
+        print(INVALID_LOCK)
         choice = input('Enter input: ')
 
     return int(choice)
 
 
-def get_account_id(role):
+def get_account_id():
     account_id = input('Enter account id: ')
+    go_back = 1
+    while not account_id.isalnum():
+        print("---invalid id formate---")
+        print(BACK)
+        go_back = get_choice((0, 1))
+        if not go_back:
+            break
+        account_id = input('Enter account id: ')
 
-    def is_valid(aid):
-        if len(aid) == 10 and aid[0] == role[0] and aid[1:].isdigit():
+    return account_id, not go_back
+
+
+def create_account_id(role):
+    def is_account_id_valid(aid):
+        if aid[0] == role[0] and len(aid[1:]) == 9:
             return True
         return False
 
-    while not is_valid(account_id):
-        print(INVALID)
+    go_back = 1
+    account_id = input('Enter account id: ')
+    while not is_account_id_valid(account_id):
+        print(INVALID_LOCK)
+        print(BACK)
+        go_back = get_choice((0, 1))
+        if not go_back:
+            break
         account_id = input('Enter account id: ')
 
-    return account_id
+    return account_id, not go_back
 
 
 def get_name(input_string):
     full_name = input(input_string).split()
-
+    go_back = 1
     while not (all([name.isalpha() for name in full_name]) and len(full_name) > 0):
-        print(INVALID)
+        print(INVALID_LOCK)
+        print(BACK)
+        go_back = get_choice((0, 1))
+        if not go_back:
+            break
         full_name = input(input_string).split()
 
     full_name = [name.lower() for name in full_name]
     full_name = [name.capitalize() for name in full_name]
     full_name = ' '.join(full_name)
-    return full_name
+    return full_name, not go_back
 
 
 def get_branch():
@@ -64,23 +90,28 @@ def is_float(number):
 def get_float(input_string):
     number = input(input_string)
     while not is_float(number):
-        print(INVALID)
+        print(INVALID_LOCK)
         number = input(input_string)
     return number
 
 
 def get_cgpa(out_of=10):
     cgpa = get_float('Enter your cgpa: ')
+    go_back = 1
     while not float(cgpa) <= out_of:
-        print(INVALID)
+        print(INVALID_LOCK)
+        print(BACK)
+        go_back = get_choice((0, 1))
+        if not go_back:
+            break
         cgpa = get_float('Enter cgpa: ')
-    return cgpa
+    return cgpa, not go_back
 
 
 def get_integer_input(input_string):
     choice = input(input_string)
     while not choice.isdigit():
-        print(INVALID)
+        print('invalid input: Enter only integer')
         choice = input(input_string)
     return choice
 
@@ -90,23 +121,29 @@ def get_year(initial=2011, max_course_time=4):
     current_year = current_date.year
 
     choice = get_integer_input('Enter year: ')
+    go_back = 1
     while not initial + max_course_time - 1 <= int(choice) <= current_year + max_course_time - 1:
-        print(INVALID)
+        print(INVALID_LOCK)
+        print(BACK)
+        go_back = get_choice((0, 1))
+        if not go_back:
+            break
         choice = get_integer_input('Enter year: ')
 
-    return choice
+    return choice, not go_back
 
 
-def get_one_time_choice(all_choices: tuple, left_choices: list, input_string, warning_string=INVALID) -> int:
+def get_one_time_choice(all_choices: tuple, left_choices: list, input_string, warning_string=INVALID_LOCK) -> int:
     choice = int(get_integer_input(input_string))
     while choice not in left_choices:
         if choice in all_choices:
             print(warning_string)
         else:
-            print(INVALID)
+            print(INVALID_LOCK)
         choice = int(get_integer_input(input_string))
 
-    left_choices.remove(choice)
+    if choice in left_choices:
+        left_choices.remove(choice)
 
     return choice
 
@@ -127,7 +164,7 @@ def is_date_valid(date):
 def get_date(input_string):
     date = input(input_string)
     while not is_date_valid(date):
-        print(INVALID)
+        print(INVALID_LOCK)
         date = input(input_string)
     return date
 
@@ -167,14 +204,20 @@ def is_password_strong(password):
 
 def get_password():
     password = input('Enter Password: ')
+    go_back = 1
     while not is_password_strong(password):
-        print('week password'
+        print('---week password---'
               '\npassword must be of at least 8 character'
               '\npassword must contains at least 1 upper letter'
               '\npassword must contains at least 1 lower letter'
               '\npassword must contains at least 1 special character')
+        print(BACK)
+        go_back = get_choice((0, 1))
+        if not go_back:
+            break
         password = input('Enter Password: ')
-    return password
+
+    return password, not go_back
 
 
 def get_hashed_password(password):

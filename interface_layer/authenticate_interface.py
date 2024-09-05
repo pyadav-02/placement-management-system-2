@@ -19,7 +19,7 @@ class AuthenticationInterface:
         password = input('Enter password: ')
 
         if StudentFunctionality.is_account_request_pending(student_id):
-            print('-----account is pending-----')
+            print('-----account request is pending-----')
             return False
 
         if not AuthenticationFunctionality.is_valid(student_id, password, 'student'):

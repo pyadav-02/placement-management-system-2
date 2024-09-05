@@ -141,7 +141,7 @@ class AdminInterface:
 
     @staticmethod
     def post_job():
-        company_name = valid.get_name('Enter company name: ')
+        company_name, flag = valid.get_name('Enter company name: ')
         job_description = input('Enter job description: ')
         ctc = valid.get_float('Enter ctc(lpa): ')
 

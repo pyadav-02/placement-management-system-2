@@ -9,16 +9,31 @@ class StudentInterface:
 
     @staticmethod
     def student_create_account():
-        student_id = valid.get_account_id('student')
+        student_id, go_back = valid.create_account_id('student')
+        if go_back:
+            return
+
         if StudentFunctionality.is_account_exist(student_id):
             print('-----account already exist-----')
             return
 
-        password = valid.get_password()
-        name = valid.get_name('Enter your name: ')
+        password, go_back = valid.get_password()
+        if go_back:
+            return
+
+        name, go_back = valid.get_name('Enter your name: ')
+        if go_back:
+            return
+
         branch = valid.get_branch()
-        year = valid.get_year()
-        cgpa = valid.get_cgpa()
+
+        year, go_back = valid.get_year()
+        if go_back:
+            return
+
+        cgpa, go_back = valid.get_cgpa()
+        if go_back:
+            return
 
         StudentFunctionality.create_account_request(student_id, password, name, branch, year, cgpa)
 
