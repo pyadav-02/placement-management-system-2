@@ -3,7 +3,7 @@ from utility import utils as db
 from utility.validation_utils import is_hash_password_valid
 
 
-class AuthenticationFunctionality:
+class Authentication:
     @staticmethod
     def is_valid(account_id, password, role):
         table_name = tbn.CREDENTIALS

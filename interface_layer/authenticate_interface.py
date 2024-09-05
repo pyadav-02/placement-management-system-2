@@ -1,5 +1,5 @@
-from business_layer.authentication import AuthenticationFunctionality
-from business_layer.student import StudentFunctionality
+from business_layer.authentication import Authentication
+from business_layer.student import Student
 import getpass
 
 
@@ -8,7 +8,7 @@ class AuthenticationInterface:
     def is_admin_valid(admin_id):
         password = getpass.getpass('Enter password: ')
 
-        if not AuthenticationFunctionality.is_valid(admin_id, password, 'admin'):
+        if not Authentication.is_valid(admin_id, password, 'admin'):
             print('-----incorrect account id or password-----')
             return False
 
@@ -19,11 +19,11 @@ class AuthenticationInterface:
     def is_student_valid(student_id):
         password = getpass.getpass('Enter password: ')
 
-        if StudentFunctionality.is_account_request_pending(student_id):
+        if Student.is_account_request_pending(student_id):
             print('-----account request is pending-----')
             return False
 
-        if not AuthenticationFunctionality.is_valid(student_id, password, 'student'):
+        if not Authentication.is_valid(student_id, password, 'student'):
             print('-----incorrect account id or password-----')
             return False
 

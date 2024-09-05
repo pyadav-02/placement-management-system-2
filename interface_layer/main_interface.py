@@ -4,8 +4,8 @@ from interface_layer.authenticate_interface import AuthenticationInterface
 from interface_layer.admin_interface import AdminInterface
 
 from interface_layer.student_interface import StudentInterface
-from business_layer.admin import AdminFunctionality
-from business_layer.student import StudentFunctionality
+from business_layer.admin import Admin
+from business_layer.student import Student
 
 
 def start_menu():
@@ -29,7 +29,7 @@ def start_menu():
                 continue
 
             if AuthenticationInterface.is_admin_valid(admin_id):
-                admin = AdminFunctionality(admin_id)
+                admin = Admin(admin_id)
                 admin = AdminInterface(admin)
                 admin.do_admin_functions()
 
@@ -39,7 +39,7 @@ def start_menu():
                 continue
 
             if AuthenticationInterface.is_student_valid(student_id):
-                student = StudentFunctionality(student_id)
+                student = Student(student_id)
                 student = StudentInterface(student)
                 student.do_student_functions()
 

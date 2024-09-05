@@ -2,7 +2,7 @@ import utility.table_names as tbn
 from utility import utils as db
 
 
-class AdminFunctionality:
+class Admin:
     def __init__(self, admin_id):
         self.__admin_id = admin_id
 

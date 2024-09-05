@@ -1,10 +1,10 @@
-from business_layer.admin import AdminFunctionality
-from business_layer.job import JobFunctionality
+from business_layer.admin import Admin
+from business_layer.job import Job
 from utility import validation_utils as valid
 
 
 class AdminInterface:
-    def __init__(self, admin_object: AdminFunctionality):
+    def __init__(self, admin_object: Admin):
         self.admin = admin_object
 
     MENU = """
@@ -37,7 +37,7 @@ class AdminInterface:
             choice = valid.get_choice(choices)
 
     def approve_refuse_accounts(self):
-        account_requests = AdminFunctionality.get_unapproved_account()
+        account_requests = Admin.get_unapproved_account()
 
         if len(account_requests) == 0:
             print('-----no pending requests-----')
@@ -77,11 +77,11 @@ class AdminInterface:
 
             if action_choice == 1:
                 self.admin.approve_account_by_id(account_id)
-                AdminFunctionality.put_id_in_credentials(account_id)
+                Admin.put_id_in_credentials(account_id)
                 print('-----account approved-----')
 
             elif action_choice == 2:
-                AdminFunctionality.refuse_account_by_id(account_id)
+                Admin.refuse_account_by_id(account_id)
                 print('-----account refused-----')
 
             if len(left_account_choices) == 0:
@@ -92,7 +92,7 @@ class AdminInterface:
             action_choice = valid.get_choice(action_choices)
 
     def give_answer_to_students(self):
-        questions = AdminFunctionality.get_all_unanswered_questions()
+        questions = Admin.get_all_unanswered_questions()
 
         if len(questions) == 0:
             print('-----no unanswered question remaining-----')
@@ -168,15 +168,15 @@ class AdminInterface:
         total_rounds_count = valid.get_integer_input('Enter total number of rounds: ')
         application_close_date = valid.get_date('Enter application close date(dd-mm-yyyy): ')
 
-        JobFunctionality.create_job_posting(company_name,
-                                            job_description,
-                                            ctc,
-                                            applicable_branches,
-                                            total_rounds_count,
-                                            application_close_date)
+        Job.create_job_posting(company_name,
+                               job_description,
+                               ctc,
+                               applicable_branches,
+                               total_rounds_count,
+                               application_close_date)
 
     def move_job_next_round(self, only_view=False):
-        job_postings = JobFunctionality.get_all_job_posting()
+        job_postings = Job.get_all_job_posting()
 
         if len(job_postings) == 0:
             print('-----no job posting is available-----')
@@ -224,7 +224,7 @@ class AdminInterface:
 
             applicants_id = job_postings[job_choice-1][-1]
             if applicants_id == 'None':
-                JobFunctionality.close_job_process(job_id)
+                Job.close_job_process(job_id)
                 print('-----no student applied for this job-----')
                 print(menu)
                 action_choice = valid.get_choice(action_choices)
@@ -237,7 +237,7 @@ class AdminInterface:
                     left_job_choices.append(job_choice)
 
                     new_current_round = str(current_round + 1)
-                    JobFunctionality.set_round_job_posting(job_id, selected_applicants_id, new_current_round)
+                    Job.set_round_job_posting(job_id, selected_applicants_id, new_current_round)
 
                     message = input('Enter message for selected students: ')
                     self.admin.send_message(message, selected_applicants_id)
@@ -246,17 +246,17 @@ class AdminInterface:
                     job_postings[job_choice - 1][-3] = new_current_round
 
                 else:
-                    JobFunctionality.close_job_process(job_id)
+                    Job.close_job_process(job_id)
                     print('---no student had cleared this round---')
 
             elif current_round == total_rounds_count:
                 selected_applicants_id = valid.get_selected_applicants(applicants_id, not_last_round=False)
                 if len(selected_applicants_id) != 0:
-                    JobFunctionality.set_students_job_status(company_name, selected_applicants_id)
+                    Job.set_students_job_status(company_name, selected_applicants_id)
                     message = input('Enter message for selected students: ')
                     self.admin.send_message(message, selected_applicants_id)
 
-                JobFunctionality.close_job_process(job_id)
+                Job.close_job_process(job_id)
 
                 print('---job process completed---')
 

@@ -1,13 +1,13 @@
 import unittest
 from unittest.mock import patch
-from business_layer.student import StudentFunctionality
+from business_layer.student import Student
 from utility import table_names as tbn
 
 
 class TestStudentFunctionality(unittest.TestCase):
     def setUp(self):
         self.student_id = 's111111111'
-        self.student = StudentFunctionality(self.student_id)
+        self.student = Student(self.student_id)
 
     def test_is_account_request_pending_empty_list(self):
         self.is_account_request_pending_tester([], False)
@@ -27,7 +27,7 @@ class TestStudentFunctionality(unittest.TestCase):
         conditions = dict(student_id=argument_student_id)
 
         mock_fetch_record_by_condition.return_value = fetch_return_value
-        result = StudentFunctionality.is_account_request_pending(argument_student_id)
+        result = Student.is_account_request_pending(argument_student_id)
 
         self.assertEqual(result, expected_result)
         mock_fetch_record_by_condition.assert_called_once_with(table_name, return_field, conditions)
@@ -54,12 +54,12 @@ class TestStudentFunctionality(unittest.TestCase):
                       approval_status='pending',
                       placement_status='unplaced')
 
-        StudentFunctionality.create_account_request(argument_student_id,
-                                                    argument_password,
-                                                    argument_name,
-                                                    argument_branch,
-                                                    argument_year,
-                                                    argument_cgpa)
+        Student.create_account_request(argument_student_id,
+                                       argument_password,
+                                       argument_name,
+                                       argument_branch,
+                                       argument_year,
+                                       argument_cgpa)
         mock_insert_record.assert_called_once_with(table_name, record)
         mock_get_hashed_password.assser_called_once_with(argument_password)
 
@@ -73,7 +73,7 @@ class TestStudentFunctionality(unittest.TestCase):
         conditions = dict(student_id=student_id)
 
         mock_fetch_record_by_condition.return_value = [(student_id,)]
-        result = StudentFunctionality.is_account_exist(student_id)
+        result = Student.is_account_exist(student_id)
         self.assertEqual(result, expected_output)
         mock_fetch_record_by_condition.assert_called_once_with(table_name, return_field, conditions)
 
@@ -87,7 +87,7 @@ class TestStudentFunctionality(unittest.TestCase):
         conditions = dict(student_id=student_id)
 
         mock_fetch_record_by_condition.return_value = []
-        result = StudentFunctionality.is_account_exist(student_id)
+        result = Student.is_account_exist(student_id)
         self.assertEqual(result, expected_output)
         mock_fetch_record_by_condition.assert_called_once_with(table_name, return_field, conditions)
 

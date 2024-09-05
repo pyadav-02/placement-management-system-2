@@ -1,10 +1,10 @@
-from business_layer.student import StudentFunctionality
-from business_layer.job import JobFunctionality
+from business_layer.student import Student
+from business_layer.job import Job
 from utility import validation_utils as valid
 
 
 class StudentInterface:
-    def __init__(self, student_object: StudentFunctionality):
+    def __init__(self, student_object: Student):
         self.student = student_object
 
     @staticmethod
@@ -13,7 +13,7 @@ class StudentInterface:
         if go_back:
             return
 
-        if StudentFunctionality.is_account_exist(student_id):
+        if Student.is_account_exist(student_id):
             print('-----account already exist-----')
             return
 
@@ -35,7 +35,7 @@ class StudentInterface:
         if go_back:
             return
 
-        StudentFunctionality.create_account_request(student_id, password, name, branch, year, cgpa)
+        Student.create_account_request(student_id, password, name, branch, year, cgpa)
 
         print('-----request for account creation is sent------')
 
@@ -88,7 +88,7 @@ class StudentInterface:
             print('-' * 10)
 
     def apply_for_job(self):
-        job_postings = JobFunctionality.get_applicable_job_postings(self.student.student_id)
+        job_postings = Job.get_applicable_job_postings(self.student.student_id)
 
         if len(job_postings) == 0:
             print('-----no job posting is available-----')
@@ -125,7 +125,7 @@ class StudentInterface:
                                                    input_string, warning_string)
 
             job_id = job_postings[job_choice-1][-3]
-            JobFunctionality.student_apply_for_job(job_id, self.student.student_id)
+            Job.student_apply_for_job(job_id, self.student.student_id)
 
             company_name = job_postings[job_choice-1][0]
             print(f'-----applied for {company_name}-----')

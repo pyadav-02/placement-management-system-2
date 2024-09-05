@@ -3,7 +3,7 @@ from utility import utils as db
 from utility import validation_utils as valid
 
 
-class StudentFunctionality:
+class Student:
     def __init__(self, student_id):
         self.student_id = student_id
 

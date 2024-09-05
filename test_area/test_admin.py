@@ -1,20 +1,20 @@
 import unittest
 from unittest.mock import patch, call
-from business_layer.admin import AdminFunctionality
+from business_layer.admin import Admin
 import utility.table_names as tbn
 
 
 class TestAdminFunctionality(unittest.TestCase):
     def setUp(self):
         self.admin_id = 'A962820126'
-        self.admin_functionality = AdminFunctionality(self.admin_id)
+        self.admin_functionality = Admin(self.admin_id)
 
     @patch('business_layer.admin.db.fetch_record_by_condition')
     def test_get_unapproved_account(self, mock_fetch_record_by_condition):
         expected_output = [('s111919191', 'abcde', 'cse', '2025'), ('s881188118', 'rishabh', 'it', '2028')]
         mock_fetch_record_by_condition.return_value = expected_output
 
-        result = AdminFunctionality.get_unapproved_account()
+        result = Admin.get_unapproved_account()
         self.assertEqual(result, expected_output)
 
         table_name = tbn.STUDENT_ACCOUNT
@@ -45,7 +45,7 @@ class TestAdminFunctionality(unittest.TestCase):
         fetch_return_value = [('root_password',)]
         mock_fetch_record_by_condition.return_value = fetch_return_value
 
-        AdminFunctionality.put_id_in_credentials(account_id)
+        Admin.put_id_in_credentials(account_id)
         mock_fetch_record_by_condition.assert_called_once_with(table_name, return_fields, conditions)
 
         password = fetch_return_value[0][0]
@@ -61,7 +61,7 @@ class TestAdminFunctionality(unittest.TestCase):
         id_field = 'student_id'
         id_field_value = argument_student_id
 
-        AdminFunctionality.refuse_account_by_id(argument_student_id)
+        Admin.refuse_account_by_id(argument_student_id)
         mock_delete_record_by_id.assert_called_once_with(table_name, id_field, id_field_value)
 
     @patch('business_layer.admin.db.fetch_record_by_condition')
@@ -70,7 +70,7 @@ class TestAdminFunctionality(unittest.TestCase):
         return_field = ('student_id', 'question', 'question_id')
         conditions = dict(is_answered='false')
 
-        AdminFunctionality.get_all_unanswered_questions()
+        Admin.get_all_unanswered_questions()
         mock_fetch_record_by_condition.assert_called_once_with(table_name, return_field, conditions)
 
     @patch('business_layer.admin.db.update_record_by_id')

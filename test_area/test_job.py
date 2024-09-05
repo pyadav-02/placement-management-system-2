@@ -1,6 +1,6 @@
 import unittest
 from unittest.mock import patch
-from business_layer.job import JobFunctionality
+from business_layer.job import Job
 from utility import table_names as tbn
 
 
@@ -25,7 +25,7 @@ class TestJobFunctionality(unittest.TestCase):
 
         call_value = (company_name, job_description, ctc, applicable_branches,
                       total_rounds_count, application_close_date)
-        JobFunctionality.create_job_posting(*call_value)
+        Job.create_job_posting(*call_value)
 
         mock_insert_record.assert_called_once_with(table_name, record)
 
@@ -43,7 +43,7 @@ class TestJobFunctionality(unittest.TestCase):
 
         mock_fetch_record_by_condition.side_effect = [return_value_fetch1, return_value_fetch2]
 
-        result = JobFunctionality.get_applicable_job_postings(student_id)
+        result = Job.get_applicable_job_postings(student_id)
         self.assertEqual(result, expected_result)
         self.assertEqual(mock_fetch_record_by_condition.call_count, 2)
 
@@ -66,7 +66,7 @@ class TestJobFunctionality(unittest.TestCase):
 
         mock_fetch_record_by_condition.return_value = [('None',)]
 
-        JobFunctionality.student_apply_for_job(job_id, student_id)
+        Job.student_apply_for_job(job_id, student_id)
 
         table_name = tbn.JOB_POSTING
         return_field = ('applicants_id',)
@@ -88,7 +88,7 @@ class TestJobFunctionality(unittest.TestCase):
         fetch_return_value = [('s112233441, s112299221', 's228447118',)]
         mock_fetch_record_by_condition.return_value = fetch_return_value
 
-        JobFunctionality.student_apply_for_job(job_id, student_id)
+        Job.student_apply_for_job(job_id, student_id)
 
         table_name = tbn.JOB_POSTING
         return_field = ('applicants_id',)
@@ -107,7 +107,7 @@ class TestJobFunctionality(unittest.TestCase):
                                '09-09-2024', 's123123123, s767876567')]
         mock_fetch_record_by_condition.return_value = fetch_return_value
 
-        result = JobFunctionality.get_all_job_posting()
+        result = Job.get_all_job_posting()
         self.assertEqual(result, fetch_return_value)
 
         table_name = tbn.JOB_POSTING
@@ -122,7 +122,7 @@ class TestJobFunctionality(unittest.TestCase):
         new_applicants_id = ('s123123141', 's123123331', 's1119991118')
         new_current_round = '3'
 
-        JobFunctionality.set_round_job_posting(job_id, new_applicants_id, new_current_round)
+        Job.set_round_job_posting(job_id, new_applicants_id, new_current_round)
 
         table_name = tbn.JOB_POSTING
         id_field = 'job_id'
@@ -136,7 +136,7 @@ class TestJobFunctionality(unittest.TestCase):
         company_name = 'watchGuard'
         students_id = ('s123112121', 's119999110', 's734234282')
 
-        JobFunctionality.set_students_job_status(company_name, students_id)
+        Job.set_students_job_status(company_name, students_id)
 
         table_name = tbn.STUDENT_ACCOUNT
         updates = dict(company_name=company_name, placement_status='placed')
@@ -147,7 +147,7 @@ class TestJobFunctionality(unittest.TestCase):
     def test_close_job_process(self, mock_delete_record_by_id):
         job_id = '21'
 
-        JobFunctionality.close_job_process(job_id)
+        Job.close_job_process(job_id)
 
         table_name = tbn.JOB_POSTING
         id_field = 'job_id'

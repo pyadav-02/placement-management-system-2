@@ -2,7 +2,7 @@ import utility.table_names as tbn
 from utility import utils as db
 
 
-class JobFunctionality:
+class Job:
     @staticmethod
     def create_job_posting(company_name,
                            job_description,
