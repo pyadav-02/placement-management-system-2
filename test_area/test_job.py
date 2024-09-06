@@ -1,5 +1,5 @@
 import unittest
-from unittest.mock import patch
+from unittest.mock import patch, call
 from business_layer.job import Job
 from utility import table_names as tbn
 
@@ -153,3 +153,21 @@ class TestJobFunctionality(unittest.TestCase):
         id_field = 'job_id'
         id_field_value = job_id
         mock_delete_record_by_id.assert_called_once_with(table_name, id_field, id_field_value)
+
+    @patch('business_layer.job.db.insert_record')
+    def test_send_message(self, mock_insert_record):
+        admin_id = 'a888878791'
+        message = 'message writen by admin'
+        student_id = ('s111122223', 's999980008', 's191000119')
+
+        Job.send_message(admin_id, message, student_id)
+
+        table_name = tbn.MESSAGE
+        record_1 = dict(student_id=student_id[0], message=message, admin_id=admin_id)
+        record_2 = dict(student_id=student_id[1], message=message, admin_id=admin_id)
+        record_3 = dict(student_id=student_id[2], message=message, admin_id=admin_id)
+
+        expected_calls = [call(table_name, record_1),
+                          call(table_name, record_2),
+                          call(table_name, record_3)]
+        mock_insert_record.assert_has_calls(expected_calls)

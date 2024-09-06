@@ -1,5 +1,5 @@
 import unittest
-from unittest.mock import patch, call
+from unittest.mock import patch
 from business_layer.admin import Admin
 import utility.table_names as tbn
 
@@ -85,21 +85,3 @@ class TestAdminFunctionality(unittest.TestCase):
 
         self.admin_functionality.answer_students_question(argument_question_id, argument_answer)
         mock_update_record_by_id.assert_called_once_with(table_name, id_field, id_field_value, updates)
-
-    @patch('business_layer.admin.db.insert_record')
-    def test_send_message(self, mock_insert_record):
-        message = 'message writen by admin'
-        student_id = ('s111122223', 's999980008', 's191000119')
-
-        self.admin_functionality.send_message(message, student_id)
-
-        table_name = tbn.MESSAGE
-        record_1 = dict(student_id=student_id[0], message=message, admin_id=self.admin_id)
-        record_2 = dict(student_id=student_id[1], message=message, admin_id=self.admin_id)
-        record_3 = dict(student_id=student_id[2], message=message, admin_id=self.admin_id)
-
-        expected_calls = [call(table_name, record_1),
-                          call(table_name, record_2),
-                          call(table_name, record_3)]
-        mock_insert_record.assert_has_calls(expected_calls)
-

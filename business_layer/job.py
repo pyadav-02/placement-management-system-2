@@ -104,3 +104,10 @@ class Job:
         id_field_value = job_id
 
         db.delete_record_by_id(table_name, id_field, id_field_value)
+
+    @staticmethod
+    def send_message(senders_id, message: str, students_id: tuple[str, ...]):
+        table_name = tbn.MESSAGE
+        for student_id in students_id:
+            records = dict(student_id=student_id, message=message, admin_id=senders_id)
+            db.insert_record(table_name, records)

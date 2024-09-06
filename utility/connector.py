@@ -24,9 +24,5 @@ class Connector:
             Connector.connection.commit()
 
     @staticmethod
-    def create_required_table():
-        pass
-
-    @staticmethod
     def disconnect():
         Connector.connection.close()

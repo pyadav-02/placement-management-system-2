@@ -4,7 +4,7 @@ from utility import utils as db
 
 class Admin:
     def __init__(self, admin_id):
-        self.__admin_id = admin_id
+        self.admin_id = admin_id
 
     @staticmethod
     def get_unapproved_account() -> list[tuple[str]]:
@@ -19,7 +19,7 @@ class Admin:
         table_name = tbn.STUDENT_ACCOUNT
         id_field = 'student_id'
         id_field_value = student_id
-        updates = dict(approval_status='approved', approver_id=self.__admin_id)
+        updates = dict(approval_status='approved', approver_id=self.admin_id)
         db.update_record_by_id(table_name, id_field, id_field_value, updates)
 
     @staticmethod
@@ -53,12 +53,5 @@ class Admin:
         table_name = tbn.QUESTION_ANSWER
         id_field = 'question_id'
         id_field_value = question_id
-        updates = dict(answer=answer, admin_id=self.__admin_id, is_answered='true')
+        updates = dict(answer=answer, admin_id=self.admin_id, is_answered='true')
         db.update_record_by_id(table_name, id_field, id_field_value, updates)
-
-    def send_message(self, message: str, students_id: tuple[str, ...]):
-        table_name = tbn.MESSAGE
-        for student_id in students_id:
-            records = dict(student_id=student_id, message=message, admin_id=self.__admin_id)
-            db.insert_record(table_name, records)
-
