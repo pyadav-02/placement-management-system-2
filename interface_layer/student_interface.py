@@ -107,8 +107,8 @@ class StudentInterface:
         print('-' * 10)
 
         menu = """
-        press 0 to go back
-        press 1 to apply for a job posting
+    press 0 to go back
+    press 1 to apply for a job posting
         """
 
         action_choices = (0, 1)

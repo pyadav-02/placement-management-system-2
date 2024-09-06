@@ -54,9 +54,9 @@ class AdminInterface:
         print('-' * 10)
 
         menu = """
-        press 0 to go back
-        press 1 to approve account
-        press 2 to refuse account
+    press 0 to go back
+    press 1 to approve account
+    press 2 to refuse account
         """
 
         action_choices = (0, 1, 2)
@@ -110,8 +110,8 @@ class AdminInterface:
         print('-' * 10)
 
         menu = """
-                press 0 to go back
-                press 1 to answer question
+    press 0 to go back
+    press 1 to answer question
                 """
 
         action_choices = (0, 1)
@@ -200,8 +200,8 @@ class AdminInterface:
             return
 
         menu = """
-                press 0 go back 
-                press 1 select a job posting
+    press 0 go back 
+    press 1 select a job posting
                 """
         action_choices = (0, 1)
         all_job_choices = tuple(i + 1 for i in range(len(job_postings)))

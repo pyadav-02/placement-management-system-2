@@ -1,6 +1,6 @@
 from utility import validation_utils as valid
 
-from interface_layer.authenticate_interface import AuthenticationInterface
+from interface_layer.authentication_interface import AuthenticationInterface
 from interface_layer.admin_interface import AdminInterface
 
 from interface_layer.student_interface import StudentInterface
@@ -44,7 +44,4 @@ def start_menu():
                 student.do_student_functions()
 
         elif choice == 3:
-
             StudentInterface.student_create_account()
-
-
