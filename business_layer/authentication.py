@@ -5,7 +5,7 @@ from utility.validation_utils import is_hash_password_valid
 
 class Authentication:
     @staticmethod
-    def is_valid(account_id, password, role):
+    def is_credential_valid(account_id, password, role):
         table_name = tbn.CREDENTIALS
         return_fields = ('password',)
         conditions = dict(account_id=account_id, role=role)

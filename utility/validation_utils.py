@@ -35,7 +35,7 @@ def get_account_id():
 
 def create_account_id(role):
     def is_account_id_valid(aid):
-        if aid[0] == role[0] and len(aid[1:]) == 9:
+        if aid[0] == role[0] and len(aid[1:]) == 9 and aid[1:].isdigit():
             return True
         return False
 

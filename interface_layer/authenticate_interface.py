@@ -8,7 +8,7 @@ class AuthenticationInterface:
     def is_admin_valid(admin_id):
         password = getpass.getpass('Enter password: ')
 
-        if not Authentication.is_valid(admin_id, password, 'admin'):
+        if not Authentication.is_credential_valid(admin_id, password, 'admin'):
             print('-----incorrect account id or password-----')
             return False
 
@@ -23,7 +23,7 @@ class AuthenticationInterface:
             print('-----account request is pending-----')
             return False
 
-        if not Authentication.is_valid(student_id, password, 'student'):
+        if not Authentication.is_credential_valid(student_id, password, 'student'):
             print('-----incorrect account id or password-----')
             return False
 
