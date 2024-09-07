@@ -1,8 +1,16 @@
 from utility.connector import Connector
 from interface_layer.main_interface import start_menu
 
-Connector.make_connection()
-start_menu()
-Connector.disconnect()
+try:
+    Connector.make_connection()
+except Exception:
+    print('We have encountered an error while connecting with database')
+    print('-----------------please try again later---------------------')
+else:
+    start_menu()
+    try:
+        Connector.disconnect()
+    except Exception:
+        pass
 
-print('\n\n-----program ended-----')
+print('\n\n---------------------program ended---------------------------')

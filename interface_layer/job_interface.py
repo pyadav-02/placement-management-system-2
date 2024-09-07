@@ -32,15 +32,24 @@ class JobInterface:
         total_rounds_count = valid.get_integer_input('Enter total number of rounds: ')
         application_close_date = valid.get_date('Enter application close date(dd-mm-yyyy): ')
 
-        Job.create_job_posting(company_name,
-                               job_description,
-                               ctc,
-                               applicable_branches,
-                               total_rounds_count,
-                               application_close_date)
+        try:
+            Job.create_job_posting(company_name,
+                                   job_description,
+                                   ctc,
+                                   applicable_branches,
+                                   total_rounds_count,
+                                   application_close_date)
+        except Exception:
+            print('---an error has occurred while posting the job please try again later---')
+            return
+
     @staticmethod
     def move_job_next_round(job_manager_id, only_view=False):
-        job_postings = Job.get_all_job_posting()
+        try:
+            job_postings = Job.get_all_job_posting()
+        except Exception:
+            print('---an error has occurred while collecting job details please try again later---')
+            return
 
         if len(job_postings) == 0:
             print('-----no job posting is available-----')
@@ -64,9 +73,9 @@ class JobInterface:
             return
 
         menu = """
-        press 0 go back 
-        press 1 select a job posting
-                    """
+    press 0 go back 
+    press 1 select a job posting
+        """
         action_choices = (0, 1)
         all_job_choices = tuple(i + 1 for i in range(len(job_postings)))
         left_job_choices = list(all_job_choices)
@@ -88,7 +97,11 @@ class JobInterface:
 
             applicants_id = job_postings[job_choice - 1][-1]
             if applicants_id == 'None':
-                Job.close_job_process(job_id)
+                try:
+                    Job.close_job_process(job_id)
+                except Exception:
+                    print('---an error has occurred while closing job please try again later---')
+                    return
                 print('-----no student applied for this job-----')
                 print(menu)
                 action_choice = valid.get_choice(action_choices)
@@ -101,27 +114,50 @@ class JobInterface:
                     left_job_choices.append(job_choice)
 
                     new_current_round = str(current_round + 1)
-                    Job.set_round_job_posting(job_id, selected_applicants_id, new_current_round)
+                    try:
+                        Job.set_round_job_posting(job_id, selected_applicants_id, new_current_round)
+                    except Exception:
+                        print('---an error has occurred while moving job process to next round'
+                              ' please try again later---')
+                        return
 
                     message = input('Enter message for selected students: ')
-                    Job.send_message(job_manager_id, message, selected_applicants_id)
+                    try:
+                        Job.send_message(job_manager_id, message, selected_applicants_id)
+                    except Exception:
+                        print('---an error has occurred while sending message---')
 
                     job_postings[job_choice - 1][-1] = ', '.join(selected_applicants_id)
                     job_postings[job_choice - 1][-3] = new_current_round
 
                 else:
-                    Job.close_job_process(job_id)
+                    try:
+                        Job.close_job_process(job_id)
+                    except:
+                        print('---an error has occurred while closing job process try again later---')
+                        return
                     print('---no student had cleared this round---')
 
             elif current_round == total_rounds_count:
                 selected_applicants_id = valid.get_selected_applicants(applicants_id, not_last_round=False)
                 if len(selected_applicants_id) != 0:
-                    Job.set_students_job_status(company_name, selected_applicants_id)
+                    try:
+                        Job.set_students_job_status(company_name, selected_applicants_id)
+                    except Exception:
+                        print('---an error has occurred while updating job process process try again later---')
+                        return
 
                     message = input('Enter message for selected students: ')
-                    Job.send_message(job_manager_id, message, selected_applicants_id)
+                    try:
+                        Job.send_message(job_manager_id, message, selected_applicants_id)
+                    except Exception:
+                        print('---an error has occurred while sending message---')
 
-                Job.close_job_process(job_id)
+                try:
+                    Job.close_job_process(job_id)
+                except:
+                    print('---an error has occurred while closing job process try again later---')
+                    return
 
                 print('---job process completed---')
 

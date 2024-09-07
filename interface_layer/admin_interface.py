@@ -37,7 +37,11 @@ class AdminInterface:
             choice = valid.get_choice(choices)
 
     def approve_refuse_accounts(self):
-        account_requests = Admin.get_unapproved_account()
+        try:
+            account_requests = Admin.get_unapproved_account()
+        except Exception:
+            print('---a problem has occurred while collecting unapproved requests please try again later---')
+            return
 
         if len(account_requests) == 0:
             print('-----no pending requests-----')
@@ -76,12 +80,21 @@ class AdminInterface:
             account_id = account_requests[account_choice-1][0]
 
             if action_choice == 1:
-                self.admin.approve_account_by_id(account_id)
-                Admin.put_id_in_credentials(account_id)
+
+                try:
+                    self.admin.approve_account_by_id(account_id)
+                    Admin.put_id_in_credentials(account_id)
+                except Exception:
+                    print('---a problem has occurred while approving requests please try again later---')
+                    return
                 print('-----account approved-----')
 
             elif action_choice == 2:
-                Admin.refuse_account_by_id(account_id)
+                try:
+                    Admin.refuse_account_by_id(account_id)
+                except Exception:
+                    print('---a problem has occurred while refusing requests please try again later---')
+                    return
                 print('-----account refused-----')
 
             if len(left_account_choices) == 0:
@@ -92,7 +105,11 @@ class AdminInterface:
             action_choice = valid.get_choice(action_choices)
 
     def give_answer_to_students(self):
-        questions = Admin.get_all_unanswered_questions()
+        try:
+            questions = Admin.get_all_unanswered_questions()
+        except Exception:
+            print('---a problem has occurred while collecting questions please try again later---')
+            return
 
         if len(questions) == 0:
             print('-----no unanswered question remaining-----')
@@ -129,7 +146,11 @@ class AdminInterface:
 
             question_id = questions[question_choice - 1][-1]
             answer = input('Enter answer: ')
-            self.admin.answer_students_question(question_id, answer)
+            try:
+                self.admin.answer_students_question(question_id, answer)
+            except Exception:
+                print('---a problem has occurred while posting answer please try again later---')
+                return
             print('-----question answered-----')
 
             if len(left_job_choices) == 0:

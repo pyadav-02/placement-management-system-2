@@ -13,7 +13,13 @@ class StudentInterface:
         if go_back:
             return
 
-        if Student.is_account_exist(student_id):
+        try:
+            verification_result = Student.is_account_exist(student_id)
+        except Exception:
+            print('---a problem has occurred while creating account please try again later---')
+            return
+
+        if verification_result:
             print('-----account already exist-----')
             return
 
@@ -35,8 +41,11 @@ class StudentInterface:
         if go_back:
             return
 
-        Student.create_account_request(student_id, password, name, branch, year, cgpa)
-
+        try:
+            verification_result = Student.create_account_request(student_id, password, name, branch, year, cgpa)
+        except Exception:
+            print('---a problem has occurred while creating account please try again later---')
+            return
         print('-----request for account creation is sent------')
 
     MENU = """
@@ -67,10 +76,17 @@ class StudentInterface:
 
     def ask_question(self):
         question = input('Enter question: ')
-        self.student.post_question(question)
+        try:
+            self.student.post_question(question)
+        except Exception:
+            print('---a problem has occurred while posting question please try again later---')
 
     def view_question_response(self):
-        responses = self.student.get_question_response()
+        try:
+            responses = self.student.get_question_response()
+        except Exception:
+            print('---a problem has occurred while collecting answers of question please try again later---')
+            return
 
         if len(responses) == 0:
             print('-----you have not asked any questions-----')
@@ -88,7 +104,11 @@ class StudentInterface:
             print('-' * 10)
 
     def apply_for_job(self):
-        job_postings = Job.get_applicable_job_postings(self.student.student_id)
+        try:
+            job_postings = Job.get_applicable_job_postings(self.student.student_id)
+        except Exception:
+            print('---a problem has occurred while collecting job details please try again later---')
+            return
 
         if len(job_postings) == 0:
             print('-----no job posting is available-----')
@@ -125,7 +145,11 @@ class StudentInterface:
                                                    input_string, warning_string)
 
             job_id = job_postings[job_choice-1][-3]
-            Job.student_apply_for_job(job_id, self.student.student_id)
+            try:
+                Job.student_apply_for_job(job_id, self.student.student_id)
+            except Exception:
+                print('---a problem has occurred while applying for job please try again later---')
+                return
 
             company_name = job_postings[job_choice-1][0]
             print(f'-----applied for {company_name}-----')
@@ -138,7 +162,11 @@ class StudentInterface:
             action_choice = valid.get_choice(action_choices)
 
     def view_mass_message(self):
-        messages = self.student.get_messages()
+        try:
+            messages = self.student.get_messages()
+        except Exception:
+            print('---a problem has occurred while collecting all messages please try again later---')
+            return
 
         if len(messages) == 0:
             print('---no messages---')
