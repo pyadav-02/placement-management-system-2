@@ -119,7 +119,7 @@ class StudentInterface:
 
         for i in range(len(job_postings)):
             print('-' * 10)
-            print(f'press {i + 1} to chose bellow job posting\n')
+            print(f'press {i + 1} to chose below job posting\n')
 
             for j in range(len(attribute_names)):
                 print(attribute_names[j], job_postings[i][j])
@@ -139,7 +139,7 @@ class StudentInterface:
         action_choice = valid.get_choice(action_choices)
 
         while action_choice != 0:
-            input_string = 'Enter input to chose job posting: '
+            input_string = 'Enter input to choose job posting: '
             warning_string = 'invalid option: you have already applied for this job'
             job_choice = valid.get_one_time_choice(all_job_choices, left_job_choices,
                                                    input_string, warning_string)

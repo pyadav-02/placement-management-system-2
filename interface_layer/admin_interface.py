@@ -50,7 +50,7 @@ class AdminInterface:
         field_names = ('student id:', 'name:', 'branch:', 'year:')
         for i in range(len(account_requests)):
             print('-' * 10)
-            print(f'press {i+1} to chose below account\n')
+            print(f'press {i+1} to choose below account\n')
 
             for j in range(4):
                 print(field_names[j], account_requests[i][j])
@@ -71,7 +71,7 @@ class AdminInterface:
         action_choice = valid.get_choice(action_choices)
 
         while action_choice != 0:
-            input_string = 'Enter input to chose account: '
+            input_string = 'Enter input to choose account: '
             warning_string = 'invalid option: account already chosen once'
             account_choice = valid.get_one_time_choice(all_account_choices,
                                                        left_account_choices,
@@ -119,7 +119,7 @@ class AdminInterface:
 
         for i in range(len(questions)):
             print('-' * 10)
-            print(f'press {i + 1} to chose below question\n')
+            print(f'press {i + 1} to choose below question\n')
 
             for j in range(len(attribute_names)):
                 print(attribute_names[j], questions[i][j])
@@ -139,7 +139,7 @@ class AdminInterface:
         action_choice = valid.get_choice(action_choices)
 
         while action_choice != 0:
-            input_string = 'Enter input to chose question: '
+            input_string = 'Enter input to choose question: '
             warning_string = 'invalid option: you have already answered this questions'
             question_choice = valid.get_one_time_choice(all_job_choices, left_job_choices,
                                                         input_string, warning_string)

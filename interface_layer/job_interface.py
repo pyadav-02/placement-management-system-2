@@ -62,7 +62,7 @@ class JobInterface:
             print('-' * 10)
 
             if not only_view:
-                print(f'press {i + 1} to chose below job posting\n')
+                print(f'press {i + 1} to choose below job posting\n')
 
             for j in range(1, len(attribute_names)):
                 print(attribute_names[j], job_postings[i][j])
