@@ -1,4 +1,5 @@
 import datetime
+import calendar
 import bcrypt
 import re
 INVALID_LOCK = 'Invalid input please enter valid input'
@@ -148,7 +149,7 @@ def get_one_time_choice(all_choices: tuple, left_choices: list, input_string, wa
     return choice
 
 
-def is_date_valid(date):
+def is_date_valid(date, future=False):
     date = date.split('-')
     if len(date) != 3:
         return False
@@ -158,12 +159,20 @@ def is_date_valid(date):
         return False
     elif len(date[2]) != 4 or not date[2].isdigit():
         return False
+
+    day, month, year = map(int, date)
+    if (year < 1) or (1 > month or month > 12) or (1 > day or day > calendar.monthrange(year, month)[1]):
+        return False
+
+    if future and datetime.date(year, month, day) < datetime.date.today():
+        return False
+
     return True
 
 
 def get_date(input_string):
     date = input(input_string)
-    while not is_date_valid(date):
+    while not is_date_valid(date, future=True):
         print(INVALID_LOCK)
         date = input(input_string)
     return date
