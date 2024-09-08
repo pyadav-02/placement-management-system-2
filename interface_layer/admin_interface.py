@@ -8,20 +8,20 @@ class AdminInterface:
         self.admin = admin_object
 
     MENU = """
-    press 0 to logout
     press 1 to approve or refuse accounts
     press 2 to give response of student's questions
     press 3 to post job
     press 4 to view all postings
     press 5 to shift the round of a job to next round
+    press 6 to logout
     """
 
     def do_admin_functions(self):
         print(AdminInterface.MENU)
-        choices = (0, 1, 2, 3, 4, 5)
+        choices = (1, 2, 3, 4, 5, 6)
         choice = valid.get_choice(choices)
 
-        while choice != 0:
+        while choice != 6:
             if choice == 1:
                 self.approve_refuse_accounts()
             elif choice == 2:
@@ -58,19 +58,19 @@ class AdminInterface:
         print('-' * 10)
 
         menu = """
-    press 0 to go back
     press 1 to approve account
     press 2 to refuse account
+    press 3 to go back
         """
 
-        action_choices = (0, 1, 2)
+        action_choices = (1, 2, 3)
         all_account_choices = tuple(i+1 for i in range(len(account_requests)))
         left_account_choices = list(all_account_choices)
 
         print(menu)
         action_choice = valid.get_choice(action_choices)
 
-        while action_choice != 0:
+        while action_choice != 3:
             input_string = 'Enter input to choose account: '
             warning_string = 'invalid option: account already chosen once'
             account_choice = valid.get_one_time_choice(all_account_choices,
@@ -127,18 +127,18 @@ class AdminInterface:
         print('-' * 10)
 
         menu = """
-    press 0 to go back
     press 1 to answer question
+    press 2 to go back
                 """
 
-        action_choices = (0, 1)
+        action_choices = (1, 2)
         all_job_choices = tuple(i + 1 for i in range(len(questions)))
         left_job_choices = list(all_job_choices)
 
         print(menu)
         action_choice = valid.get_choice(action_choices)
 
-        while action_choice != 0:
+        while action_choice != 2:
             input_string = 'Enter input to choose question: '
             warning_string = 'invalid option: you have already answered this questions'
             question_choice = valid.get_one_time_choice(all_job_choices, left_job_choices,

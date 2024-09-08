@@ -12,12 +12,12 @@ class JobInterface:
         applicable_branches = []
         print('add applicable branches')
         menu = """
-            press 0 to continue filling other details
             press 1 add branches
+            press 2 to continue filling other details
             """
-        choices = (0, 1)
+        choices = (1, 2)
         choice = 1
-        while choice != 0:
+        while choice != 2:
             branch = valid.get_branch()
             if branch in applicable_branches:
                 print('--branch already added--')
@@ -73,10 +73,10 @@ class JobInterface:
             return
 
         menu = """
-    press 0 go back 
     press 1 select a job posting
+    press 2 go back 
         """
-        action_choices = (0, 1)
+        action_choices = (1, 2)
         all_job_choices = tuple(i + 1 for i in range(len(job_postings)))
         left_job_choices = list(all_job_choices)
 
@@ -84,7 +84,7 @@ class JobInterface:
         action_choice = valid.get_choice(action_choices)
 
         job_postings = [list(job_posting) for job_posting in job_postings]
-        while action_choice != 0:
+        while action_choice != 2:
             input_string = 'Enter input to chose job posting: '
             warning_string = 'invalid option: all rounds of this job is completed'
             job_choice = valid.get_one_time_choice(all_job_choices, left_job_choices,
@@ -133,7 +133,7 @@ class JobInterface:
                 else:
                     try:
                         Job.close_job_process(job_id)
-                    except:
+                    except Exception:
                         print('---an error has occurred while closing job process try again later---')
                         return
                     print('---no student had cleared this round---')
@@ -155,7 +155,7 @@ class JobInterface:
 
                 try:
                     Job.close_job_process(job_id)
-                except:
+                except Exception:
                     print('---an error has occurred while closing job process try again later---')
                     return
 

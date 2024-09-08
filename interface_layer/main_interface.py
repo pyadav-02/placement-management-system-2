@@ -10,15 +10,15 @@ from business_layer.student import Student
 
 def start_menu():
     menu = """
-    press 0 to exit
     press 1 for admin login
     press 2 for student login
     press 3 for creating student account
+    press 4 to exit
     """
 
-    choices = [0, 1, 2, 3]
+    choices = (1, 2, 3, 4)
     choice = -1
-    while choice != 0:
+    while choice != 4:
 
         print(menu)
         choice = valid.get_choice(choices)

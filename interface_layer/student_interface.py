@@ -42,26 +42,26 @@ class StudentInterface:
             return
 
         try:
-            verification_result = Student.create_account_request(student_id, password, name, branch, year, cgpa)
+            Student.create_account_request(student_id, password, name, branch, year, cgpa)
         except Exception:
             print('---a problem has occurred while creating account please try again later---')
             return
         print('-----request for account creation is sent------')
 
     MENU = """
-    press 0 to logout
     press 1 to ask question
     press 2 to view responses of questions
     press 3 to apply for job
     press 4 to view all messages
+    press 5 to logout
     """
 
     def do_student_functions(self):
         print(StudentInterface.MENU)
-        choices = (0, 1, 2, 3, 4)
+        choices = (1, 2, 3, 4, 5)
         choice = valid.get_choice(choices)
 
-        while choice != 0:
+        while choice != 5:
             if choice == 1:
                 self.ask_question()
             elif choice == 2:
@@ -127,18 +127,18 @@ class StudentInterface:
         print('-' * 10)
 
         menu = """
-    press 0 to go back
     press 1 to apply for a job posting
+    press 2 to go back
         """
 
-        action_choices = (0, 1)
+        action_choices = (1, 2)
         all_job_choices = tuple(i + 1 for i in range(len(job_postings)))
         left_job_choices = list(all_job_choices)
 
         print(menu)
         action_choice = valid.get_choice(action_choices)
 
-        while action_choice != 0:
+        while action_choice != 2:
             input_string = 'Enter input to choose job posting: '
             warning_string = 'invalid option: you have already applied for this job'
             job_choice = valid.get_one_time_choice(all_job_choices, left_job_choices,

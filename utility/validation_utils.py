@@ -3,8 +3,8 @@ import bcrypt
 import re
 INVALID_LOCK = 'Invalid input please enter valid input'
 BACK = """
-press 0 to go back
 press 1 to continue giving input
+press 2 to go back
 """
 
 
@@ -25,12 +25,12 @@ def get_account_id():
     while not account_id.isalnum():
         print("---invalid id formate---")
         print(BACK)
-        go_back = get_choice((0, 1))
-        if not go_back:
+        go_back = get_choice((1, 2))
+        if go_back == 2:
             break
         account_id = input('Enter account id: ')
 
-    return account_id, not go_back
+    return account_id, go_back == 2
 
 
 def create_account_id(role):
@@ -44,12 +44,12 @@ def create_account_id(role):
     while not is_account_id_valid(account_id):
         print(INVALID_LOCK)
         print(BACK)
-        go_back = get_choice((0, 1))
-        if not go_back:
+        go_back = get_choice((1, 2))
+        if go_back == 2:
             break
         account_id = input('Enter account id: ')
 
-    return account_id, not go_back
+    return account_id, go_back == 2
 
 
 def get_name(input_string):
@@ -58,15 +58,15 @@ def get_name(input_string):
     while not (all([name.isalpha() for name in full_name]) and len(full_name) > 0):
         print(INVALID_LOCK)
         print(BACK)
-        go_back = get_choice((0, 1))
-        if not go_back:
+        go_back = get_choice((1, 2))
+        if go_back == 2:
             break
         full_name = input(input_string).split()
 
     full_name = [name.lower() for name in full_name]
     full_name = [name.capitalize() for name in full_name]
     full_name = ' '.join(full_name)
-    return full_name, not go_back
+    return full_name, go_back == 2
 
 
 def get_branch():
@@ -101,11 +101,11 @@ def get_cgpa(out_of=10):
     while not float(cgpa) <= out_of:
         print(INVALID_LOCK)
         print(BACK)
-        go_back = get_choice((0, 1))
-        if not go_back:
+        go_back = get_choice((1, 2))
+        if go_back == 2:
             break
         cgpa = get_float('Enter cgpa: ')
-    return cgpa, not go_back
+    return cgpa, go_back == 2
 
 
 def get_integer_input(input_string):
@@ -125,12 +125,12 @@ def get_year(initial=2011, max_course_time=4):
     while not initial + max_course_time - 1 <= int(choice) <= current_year + max_course_time - 1:
         print(INVALID_LOCK)
         print(BACK)
-        go_back = get_choice((0, 1))
-        if not go_back:
+        go_back = get_choice((1, 2))
+        if go_back == 2:
             break
         choice = get_integer_input('Enter year: ')
 
-    return choice, not go_back
+    return choice, go_back == 2
 
 
 def get_one_time_choice(all_choices: tuple, left_choices: list, input_string, warning_string=INVALID_LOCK) -> int:
@@ -206,12 +206,12 @@ def get_password():
               '\npassword must contains at least 1 lower letter'
               '\npassword must contains at least 1 special character')
         print(BACK)
-        go_back = get_choice((0, 1))
-        if not go_back:
+        go_back = get_choice((1, 2))
+        if go_back == 2:
             break
         password = input('Enter Password: ')
 
-    return password, not go_back
+    return password, go_back == 2
 
 
 def get_hashed_password(password):
