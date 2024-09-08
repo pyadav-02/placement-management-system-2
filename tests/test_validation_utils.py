@@ -23,7 +23,7 @@ class TestValid(unittest.TestCase):
     def test_get_account_id(self, mock_get_choice):
         mock_get_choice.side_effect = [1, 1]
         self.mock_input.side_effect = ['s21&31', 'h1*23j', 's118abc']
-        expected_result = ('s118abc', 0)
+        expected_result = ('s118abc', False)
 
         result = valid.get_account_id()
 
@@ -33,9 +33,9 @@ class TestValid(unittest.TestCase):
 
     @patch('utility.validation_utils.get_choice')
     def test_get_account_id_go_back(self, mock_get_choice):
-        mock_get_choice.side_effect = [1, 0]
+        mock_get_choice.side_effect = [1, 2]
         self.mock_input.side_effect = ['s21&31', 'h1*23j']
-        expected_result = ('h1*23j', 1)
+        expected_result = ('h1*23j', True)
 
         result = valid.get_account_id()
 
@@ -55,7 +55,7 @@ class TestValid(unittest.TestCase):
         self.assertEqual(mock_get_choice.call_count, 2)
 
     def create_account_id_go_back(self, mock_get_choice, role):
-        mock_get_choice.side_effect = [1, 1, 0]
+        mock_get_choice.side_effect = [1, 1, 2]
         self.mock_input.side_effect = ['abc123', '1234', role[0] + 'a111dad']
         expected_result = (role[0] + 'a111dad', True)
 
@@ -96,7 +96,7 @@ class TestValid(unittest.TestCase):
     @patch('utility.validation_utils.get_choice')
     def test_get_name_go_back(self, mock_get_choice):
         input_string = 'enter your name= '
-        mock_get_choice.side_effect = [1, 1, 0]
+        mock_get_choice.side_effect = [1, 1, 2]
         self.mock_input.side_effect = ['abc123', 'a111111111', 'arun+kumar']
         expected_result = ('Arun+kumar', True)
 
@@ -147,7 +147,7 @@ class TestValid(unittest.TestCase):
     @patch('utility.validation_utils.get_float')
     def test_get_cgpa_go_back(self, mock_get_float, mock_get_choice):
         mock_get_float.side_effect = ['12', '19.91']
-        mock_get_choice.side_effect = [1, 0]
+        mock_get_choice.side_effect = [1, 2]
         expected_result = ('19.91', True)
 
         result = valid.get_cgpa()
@@ -181,7 +181,7 @@ class TestValid(unittest.TestCase):
     @patch('utility.validation_utils.get_integer_input')
     @patch('utility.validation_utils.get_choice')
     def test_get_year_go_back(self, mock_get_choice, mock_get_integer_input):
-        mock_get_choice.side_effect = [1, 1, 0]
+        mock_get_choice.side_effect = [1, 1, 2]
         mock_get_integer_input.side_effect = [2000, 3000, 9025]
         expected_result = (9025, True)
 
@@ -209,13 +209,16 @@ class TestValid(unittest.TestCase):
         self.assertEqual(valid.is_date_valid('abcd'), False)
         self.assertEqual(valid.is_date_valid('au-aj-abcd'), False)
         self.assertEqual(valid.is_date_valid('1-12-2020'), False)
-        self.assertEqual(valid.is_date_valid('02-09-1010'), True)
+        self.assertEqual(valid.is_date_valid('00-09-1010'), False)
+        self.assertEqual(valid.is_date_valid('01-09-1010'), True)
+        self.assertEqual(valid.is_date_valid('01-09-1010', future=True), False)
+        self.assertEqual(valid.is_date_valid('01-09-2029', future=True), True)
 
     @patch('utility.validation_utils.is_date_valid')
     def test_get_date(self, mock_is_date_valid):
-        self.mock_input.side_effect = ['abcd', 'ah-eu-abcd', '1-909-9919', '01-01-0000']
+        self.mock_input.side_effect = ['abcd', 'ah-eu-abcd', '1-909-9919', '01-09-2029']
         mock_is_date_valid.side_effect = [False, False, False, True]
-        expected_result = '01-01-0000'
+        expected_result = '01-09-2029'
 
         result = valid.get_date('enter: ')
 
@@ -261,7 +264,7 @@ class TestValid(unittest.TestCase):
     def test_get_password_go_back(self, mock_is_password_strong, mock_get_choice):
         mock_is_password_strong.side_effect = [False, False, False]
         self.mock_input.side_effect = ['butterfly', 'Butterfly123', 'Butter1234']
-        mock_get_choice.side_effect = [1, 1, 0]
+        mock_get_choice.side_effect = [1, 1, 2]
         expected_result = ('Butter1234', True)
 
         result = valid.get_password()
@@ -296,4 +299,3 @@ class TestValid(unittest.TestCase):
         mock_checkpw.return_value = False
         result = valid.is_hash_password_valid('1234', 'abcd')
         self.assertEqual(result, False)
-
