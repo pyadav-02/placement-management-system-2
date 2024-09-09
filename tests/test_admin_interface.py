@@ -9,14 +9,20 @@ class TestAdminInterface(unittest.TestCase):
     def setUp(self):
         self.admin = Admin('a111111111')
         self.admin_interface = AdminInterface(self.admin)
-        input_patcher = patch('builtins.input')
-        self.mock_input = input_patcher.start()
-        print_patcher = patch('builtins.print')
-        self.mock_print = print_patcher.start()
-        get_choice_patcher = patch('interface_layer.admin_interface.valid.get_choice')
-        self.mock_get_choice = get_choice_patcher.start()
-        get_one_time_choice_patcher = patch('interface_layer.admin_interface.valid.get_choice')
-        self.mock_get_one_time_choice = get_one_time_choice_patcher.start()
+        self.input_patcher = patch('builtins.input')
+        self.mock_input = self.input_patcher.start()
+        self.print_patcher = patch('builtins.print')
+        self.mock_print = self.print_patcher.start()
+        self.get_choice_patcher = patch('interface_layer.admin_interface.valid.get_choice')
+        self.mock_get_choice = self.get_choice_patcher.start()
+        self.get_one_time_choice_patcher = patch('interface_layer.admin_interface.valid.get_one_time_choice')
+        self.mock_get_one_time_choice = self.get_one_time_choice_patcher.start()
+
+    def tearDown(self):
+        self.input_patcher.stop()
+        self.print_patcher.stop()
+        self.get_choice_patcher.stop()
+        self.get_one_time_choice_patcher.stop()
 
     @patch('interface_layer.admin_interface.JobInterface.move_job_next_round')
     @patch('interface_layer.admin_interface.JobInterface.post_job')
@@ -41,13 +47,53 @@ class TestAdminInterface(unittest.TestCase):
     @patch('interface_layer.admin_interface.Admin.put_id_in_credentials')
     @patch('interface_layer.admin_interface.Admin.approve_account_by_id')
     @patch('interface_layer.admin_interface.Admin.get_unapproved_account')
-    def helper_approve_refuse_account(self, mock_get_unapproved_account, mock_approve_account,
-                                      mock_put_id_in_credentials, mock_refuse_account):
-        mock_get_unapproved_account.side_effect = [('s11112223', 'samir', 'it', '2024'),
+    def test_approve_refuse_account(self, mock_get_unapproved_account, mock_approve_account,
+                                    mock_put_id_in_credentials, mock_refuse_account):
+        mock_get_unapproved_account.side_effect = [[('s11112223', 'samir', 'it', '2024'),
                                                    ('s991122341', 'hari', 'cse', '2025'),
-                                                   ('s312231123', 'tara', 'me', '2025')]
-        self.mock_get_choice.side_effect = action_choice
-        self.mock_get_one_time_choice.side_effect = account_choice
+                                                   ('s312231123', 'tara', 'me', '2025')]]
+        self.mock_get_choice.side_effect = [1, 2, 3]
+        self.mock_get_one_time_choice.side_effect = [1, 2]
+
+        self.admin_interface.approve_refuse_accounts()
+
+        mock_approve_account.assert_called_once_with('s11112223')
+        mock_put_id_in_credentials.assert_called_once_with('s11112223')
+        mock_refuse_account.assert_called_once_with('s991122341')
+
+    @patch('interface_layer.admin_interface.Admin.refuse_account_by_id')
+    @patch('interface_layer.admin_interface.Admin.put_id_in_credentials')
+    @patch('interface_layer.admin_interface.Admin.approve_account_by_id')
+    @patch('interface_layer.admin_interface.Admin.get_unapproved_account')
+    def test_approve_refuse_account_no_pending_requests(self, mock_get_unapproved_account, mock_approve_account,
+                                                        mock_put_id_in_credentials, mock_refuse_account):
+        mock_get_unapproved_account.side_effect = [[]]
+
+        self.admin_interface.approve_refuse_accounts()
+
+        mock_approve_account.assert_not_called()
+        mock_put_id_in_credentials.assert_not_called()
+        mock_refuse_account.assert_not_called()
+
+    @patch('interface_layer.admin_interface.Admin.get_all_unanswered_questions')
+    def test_give_answer_to_students_no_questions(self, mock_get_all_unanswered_questions):
+        mock_get_all_unanswered_questions.side_effect = [[]]
+        self.admin_interface.give_answer_to_students()
+        mock_get_all_unanswered_questions.assert_called_once()
+
+    @patch('interface_layer.admin_interface.Admin.answer_students_question')
+    @patch('interface_layer.admin_interface.Admin.get_all_unanswered_questions')
+    def test_give_answer_to_students(self, mock_get_all_unanswered_questions, mock_answer_students_question):
+        mock_get_all_unanswered_questions.side_effect = [[('s111111113', 'what is it', '3'),
+                                                          ('s281111111', 'helo helo', '4'),
+                                                          ('s111777777', 'room number?', '5')]]
+        self.mock_get_choice.side_effect = [1, 1, 2]
+        self.mock_get_one_time_choice.side_effect = [1, 2]
+        self.mock_input.side_effect = ['bye', 'number 4']
+
+        self.admin_interface.give_answer_to_students()
+
+        mock_answer_students_question.assert_has_calls([call('3', 'bye'), call('4', 'number 4')])
 
 
 

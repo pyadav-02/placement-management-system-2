@@ -52,7 +52,7 @@ class AdminInterface:
             print('-' * 10)
             print(f'press {i+1} to choose below account\n')
 
-            for j in range(4):
+            for j in range(len(field_names)):
                 print(field_names[j], account_requests[i][j])
 
         print('-' * 10)

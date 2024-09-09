@@ -5,10 +5,14 @@ from utility import validation_utils as valid
 
 class TestValid(unittest.TestCase):
     def setUp(self):
-        input_patcher = patch('builtins.input')
-        self.mock_input = input_patcher.start()
-        print_patcher = patch('builtins.print')
-        self.mock_print = print_patcher.start()
+        self.input_patcher = patch('builtins.input')
+        self.mock_input = self.input_patcher.start()
+        self.print_patcher = patch('builtins.print')
+        self.mock_print = self.print_patcher.start()
+
+    def tearDown(self):
+        self.input_patcher.stop()
+        self.print_patcher.stop()
 
     def test_get_choice(self):
         choices = (0, 1, 2, 3)
@@ -118,6 +122,7 @@ class TestValid(unittest.TestCase):
 
     def test_is_float_false(self):
         self.assertEqual(valid.is_float('12.r123'), False)
+        self.assertEqual(valid.is_float('12.r123.fda'), False)
 
     def test_is_float_true(self):
         self.assertEqual(valid.is_float('12.123'), True)
@@ -197,18 +202,20 @@ class TestValid(unittest.TestCase):
         left_choices = [1, 4]
         input_string = 'enter: '
         warning_string = 'invalid warning'
-        mock_get_integer_input.side_effect = [2, 3, 2, 4]
+        mock_get_integer_input.side_effect = [17, 2, 3, 2, 4]
         expected_result = 4
 
         result = valid.get_one_time_choice(all_choices, left_choices, input_string, warning_string)
         self.assertEqual(result, expected_result)
         self.assertEqual(left_choices, [1])
-        self.assertEqual(mock_get_integer_input.call_count, 4)
+        self.assertEqual(mock_get_integer_input.call_count, 5)
 
     def test_is_date_valid(self):
         self.assertEqual(valid.is_date_valid('abcd'), False)
         self.assertEqual(valid.is_date_valid('au-aj-abcd'), False)
         self.assertEqual(valid.is_date_valid('1-12-2020'), False)
+        self.assertEqual(valid.is_date_valid('01-124-2020'), False)
+        self.assertEqual(valid.is_date_valid('01-12-202021'), False)
         self.assertEqual(valid.is_date_valid('00-09-1010'), False)
         self.assertEqual(valid.is_date_valid('01-09-1010'), True)
         self.assertEqual(valid.is_date_valid('01-09-1010', future=True), False)
