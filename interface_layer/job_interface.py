@@ -30,6 +30,10 @@ class JobInterface:
         print(f'selected branches are {applicable_branches}')
 
         total_rounds_count = valid.get_integer_input('Enter total number of rounds: ')
+        while total_rounds_count <= 0:
+            print('total number or round must be greater than 0')
+            total_rounds_count = valid.get_integer_input('Enter total number of rounds: ')
+
         application_close_date = valid.get_date('Enter application close date(dd-mm-yyyy): ')
 
         try:
