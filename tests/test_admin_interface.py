@@ -1,5 +1,4 @@
 from interface_layer.admin_interface import AdminInterface
-from interface_layer.admin_interface import JobInterface
 from business_layer.admin import Admin
 from unittest.mock import patch, call
 import unittest
